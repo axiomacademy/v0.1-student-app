@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../components/text_fields.dart';
+
 class HomePage extends StatefulWidget {
   HomePage({Key key}) : super(key: key);
 
@@ -14,8 +16,29 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Material(
         child: Scaffold(
+      appBar: PreferredSize(
+          preferredSize: Size.fromHeight(100),
+          child: SafeArea(
+              child: Container(
+                  margin: EdgeInsets.only(left: 20.0, right: 10.0, top: 8.0),
+                  child: Row(children: <Widget>[
+                    Expanded(
+                        child: FilledTextFormField(
+                            labelText: "Search",
+                            prefixIcon: Icon(Icons.search, size: 25.0),
+                            validator: (input) {})),
+                    IconButton(
+                        padding: EdgeInsets.only(left: 10.0, right: 0.0),
+                        onPressed: () {},
+                        icon: Icon(Icons.menu,
+                            color: Color(0xFF5B5B5B), size: 25.0)),
+                  ])))),
       bottomNavigationBar: BottomNavigationBar(
+        type: BottomNavigationBarType.fixed,
         backgroundColor: Theme.of(context).primaryColor,
+        unselectedItemColor: Color(0x99FFFFFF),
+        selectedItemColor: Color(0xFFFFFFFF),
+        selectedFontSize: 12,
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
@@ -35,7 +58,11 @@ class _HomePageState extends State<HomePage> {
           ),
         ],
         currentIndex: _currentIndex,
-        onTap: (index) {},
+        onTap: (index) {
+          setState(() {
+            _currentIndex = index;
+          });
+        },
       ),
     ));
   }

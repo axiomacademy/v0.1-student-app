@@ -17,6 +17,8 @@ ThemeData buildTheme() {
     accentColor: accentColor,
     textTheme: textBase,
     cursorColor: primaryColors_100,
+    highlightColor: Color(0x00FFFFFF),
+    splashColor: Color(0x00FFFFFF),
     primaryTextTheme:
         textBase.apply(displayColor: primaryColor, bodyColor: primaryColor),
     accentTextTheme:
