@@ -69,3 +69,43 @@ class TextFlatButton extends StatelessWidget {
         ));
   }
 }
+
+class TextIconFlatButton extends StatelessWidget {
+  final VoidCallback onPressed;
+  final String text;
+  final IconData icon;
+
+  TextIconFlatButton(
+      {@required this.onPressed,
+      @required this.text,
+      @required this.icon,
+      Key key})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return ButtonTheme(
+        padding: EdgeInsets.all(10.0), //adds padding inside the button
+        materialTapTargetSize: MaterialTapTargetSize
+            .shrinkWrap, //limits the touch area to the button area
+        minWidth: 0, //wraps child's width
+        height: 0, //wraps child's height
+        child: FlatButton(
+          onPressed: onPressed,
+          splashColor: Color(0xFFD7C6F3),
+          highlightColor: Color(0xFFF0E8FA),
+          child: Row(children: <Widget>[
+            Padding(
+                padding: EdgeInsets.only(right: 5.0),
+                child: Icon(icon, color: Theme.of(context).primaryColor)),
+            Text(
+              text.toUpperCase(),
+              style: Theme.of(context)
+                  .primaryTextTheme
+                  .button
+                  .copyWith(fontWeight: FontWeight.w600),
+            )
+          ]),
+        ));
+  }
+}
