@@ -30,7 +30,7 @@ class IconRaisedButton extends StatelessWidget {
             size: 17.0,
           ),
           Spacer(),
-          Text(text,
+          Text(text.toUpperCase(),
               style: Theme.of(context)
                   .textTheme
                   .button
@@ -60,7 +60,7 @@ class TextFlatButton extends StatelessWidget {
           splashColor: Color(0xFFD7C6F3),
           highlightColor: Color(0xFFF0E8FA),
           child: Text(
-            text,
+            text.toUpperCase(),
             style: Theme.of(context)
                 .primaryTextTheme
                 .button

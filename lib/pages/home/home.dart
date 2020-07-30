@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../components/text_fields.dart';
-import '../../components/avatar.dart';
+import '../../components/list_items.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({Key key}) : super(key: key);
@@ -35,53 +35,31 @@ class _HomePageState extends State<HomePage> {
                           icon: Icon(Icons.menu,
                               color: Color(0xFF5B5B5B), size: 25.0)),
                     ]),
-                    Text("Upcoming Sessions",
-                        style: Theme.of(context).textTheme.headline6),
-                    Container(
-                        padding: EdgeInsets.only(right: 0.0, left: 0.0),
-                        child: Row(children: <Widget>[
-                          UserAvatar(
-                            "https://s3-ap-southeast-1.amazonaws.com/engpeepingmoon/140919054722tiger-shroff.jpg",
-                          ),
-                          Expanded(
-                              child: Container(
-                                  margin: EdgeInsets.only(left: 12.0),
-                                  padding:
-                                      EdgeInsets.only(top: 10.0, bottom: 15.0),
-                                  decoration: BoxDecoration(
-                                      border: Border(
-                                          bottom: BorderSide(
-                                              color: Color(0xFFE0E0E0),
-                                              width: 1.0))),
-                                  child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: <Widget>[
-                                        Padding(
-                                            padding: EdgeInsets.only(
-                                                top: 5.0, bottom: 5.0),
-                                            child: Text("TODAY",
-                                                style: Theme.of(context)
-                                                    .accentTextTheme
-                                                    .overline
-                                                    .copyWith(
-                                                        fontWeight:
-                                                            FontWeight.w500))),
-                                        Text("Physics 101",
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .subtitle1),
-                                        Padding(
-                                            padding: EdgeInsets.only(top: 5.0),
-                                            child: Text("Arvinderjit Singh",
-                                                style: Theme.of(context)
-                                                    .textTheme
-                                                    .bodyText2
-                                                    .copyWith(
-                                                        color: Color(
-                                                            0xFF666666)))),
-                                      ]))),
-                        ])),
+                    ListView(shrinkWrap: true, children: <Widget>[
+                      Container(
+                          padding: EdgeInsets.only(top: 20.0, bottom: 0.0),
+                          child: Text("Upcoming Sessions",
+                              style: Theme.of(context).textTheme.headline6)),
+                      UpcomingListItem(
+                          active: true,
+                          readableDate: "Happening now",
+                          readableTime: "",
+                          topic: "Physics 101",
+                          tutorName: "Arvinderjit Singh",
+                          tutorImage:
+                              "https://s3-ap-southeast-1.amazonaws.com/engpeepingmoon/140919054722tiger-shroff.jpg"),
+                      UpcomingListItem(
+                          readableDate: "In 2 days",
+                          readableTime: "10 - 11AM",
+                          topic: "AP Economics",
+                          tutorName: "Jasmine Sylvia",
+                          tutorImage:
+                              "https://s3.envato.com/files/236560326/preview.jpg"),
+                      Container(
+                          padding: EdgeInsets.only(top: 20.0, bottom: 0.0),
+                          child: Text("Recent Sessions",
+                              style: Theme.of(context).textTheme.headline6)),
+                    ]),
                   ]))),
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
