@@ -312,45 +312,59 @@ class LessonListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.only(right: 10.0, left: 0.0),
-      child: Row(children: <Widget>[
-        UserAvatar(tutorImage, active: false),
-        Expanded(
-            child: Container(
-                margin: EdgeInsets.only(left: 14.0),
-                padding: EdgeInsets.only(top: 10.0, bottom: 15.0),
-                decoration: BoxDecoration(
-                    border: Border(
-                        bottom:
-                            BorderSide(color: Color(0xFFE0E0E0), width: 1.0))),
-                child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Padding(
-                          padding: EdgeInsets.only(top: 5.0, bottom: 5.0),
-                          child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: <Widget>[
-                                Text(time.toUpperCase(),
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .overline
-                                        .copyWith(
-                                            color: Color(0xFF666666),
-                                            fontWeight: FontWeight.w500))
-                              ])),
-                      Text(subject,
-                          style: Theme.of(context).textTheme.subtitle1),
-                      Padding(
-                          padding: EdgeInsets.only(top: 5.0),
-                          child: Text(tutorName,
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyText2
-                                  .copyWith(color: Color(0xFF666666)))),
-                    ]))),
-      ]),
-    );
+    return Material(
+        child: Ink(
+            child: InkWell(
+                customBorder: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                splashColor: Color(0xFFF0E8FA),
+                onTap: () {},
+                child: Padding(
+                  padding: EdgeInsets.only(left: 10.0, right: 10.0),
+                  child: Row(children: <Widget>[
+                    UserAvatar(tutorImage, active: false),
+                    Expanded(
+                        child: Container(
+                            margin: EdgeInsets.only(left: 14.0),
+                            padding: EdgeInsets.only(top: 10.0, bottom: 15.0),
+                            decoration: BoxDecoration(
+                                border: Border(
+                                    bottom: BorderSide(
+                                        color: Color(0xFFE0E0E0), width: 1.0))),
+                            child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: <Widget>[
+                                  Padding(
+                                      padding: EdgeInsets.only(
+                                          top: 5.0, bottom: 5.0),
+                                      child: Row(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: <Widget>[
+                                            Text(time.toUpperCase(),
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .overline
+                                                    .copyWith(
+                                                        color:
+                                                            Color(0xFF666666),
+                                                        fontWeight:
+                                                            FontWeight.w500))
+                                          ])),
+                                  Text(subject,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .subtitle1),
+                                  Padding(
+                                      padding: EdgeInsets.only(top: 5.0),
+                                      child: Text(tutorName,
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodyText2
+                                              .copyWith(
+                                                  color: Color(0xFF666666)))),
+                                ]))),
+                  ]),
+                ))));
   }
 }

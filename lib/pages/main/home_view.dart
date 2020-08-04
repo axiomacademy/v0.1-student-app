@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../components/avatar.dart';
+import '../../components/buttons.dart';
 import '../../components/appbar.dart';
 import '../../components/list_items.dart';
 
@@ -25,7 +27,7 @@ class _HomeViewState extends State<HomeView> {
                 left: 20.0, right: 10.0, top: 20.0, bottom: 5.0),
             child: Text("Upcoming Sessions",
                 style: Theme.of(context).textTheme.headline6)),
-        UpcomingListItem(
+        _UpcomingListItem(
             active: true,
             readableDate: "Happening now",
             readableTime: "",
@@ -33,7 +35,7 @@ class _HomeViewState extends State<HomeView> {
             tutorName: "Arvinderjit Singh",
             tutorImage:
                 "https://s3-ap-southeast-1.amazonaws.com/engpeepingmoon/140919054722tiger-shroff.jpg"),
-        UpcomingListItem(
+        _UpcomingListItem(
             readableDate: "In 2 days",
             readableTime: "10 - 11AM",
             subject: "Economics",
@@ -74,5 +76,95 @@ class _HomeViewState extends State<HomeView> {
             description: "Went through specific gravity, bouyancy concepts"),
       ]),
     ));
+  }
+}
+
+///**************** UTILITY WIDGETS ************************************
+class _UpcomingListItem extends StatelessWidget {
+  final String tutorImage;
+  final String readableDate;
+  final String readableTime;
+  final String subject;
+  final String tutorName;
+  final bool active;
+
+  _UpcomingListItem(
+      {@required this.readableDate,
+      @required this.readableTime,
+      @required this.tutorImage,
+      @required this.subject,
+      @required this.tutorName,
+      this.active = false,
+      Key key})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+        child: Container(
+            padding: EdgeInsets.only(left: 20.0, right: 20.0),
+            child: Stack(children: <Widget>[
+              Row(children: <Widget>[
+                UserAvatar(tutorImage, active: active),
+                Expanded(
+                    child: Container(
+                        margin: EdgeInsets.only(left: (active) ? 10.0 : 14.0),
+                        padding: EdgeInsets.only(top: 10.0, bottom: 15.0),
+                        decoration: BoxDecoration(
+                            border: Border(
+                                bottom: BorderSide(
+                                    color: Color(0xFFE0E0E0), width: 1.0))),
+                        child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Padding(
+                                  padding:
+                                      EdgeInsets.only(top: 5.0, bottom: 5.0),
+                                  child: Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: <Widget>[
+                                        Text(readableDate.toUpperCase(),
+                                            style: Theme.of(context)
+                                                .accentTextTheme
+                                                .overline
+                                                .copyWith(
+                                                    fontWeight:
+                                                        FontWeight.w600)),
+                                        Text(
+                                            (readableTime != "")
+                                                ? " | " +
+                                                    readableTime.toUpperCase()
+                                                : "",
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .overline
+                                                .copyWith(
+                                                    color: Color(0xFF666666),
+                                                    fontWeight:
+                                                        FontWeight.w500))
+                                      ])),
+                              Text(subject,
+                                  style: Theme.of(context).textTheme.subtitle1),
+                              Padding(
+                                  padding: EdgeInsets.only(top: 5.0),
+                                  child: Text(tutorName,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyText2
+                                          .copyWith(color: Color(0xFF666666)))),
+                            ]))),
+              ]),
+              (active)
+                  ? Positioned.fill(
+                      child: Container(
+                          margin: EdgeInsets.only(bottom: 2.0),
+                          alignment: Alignment.bottomRight,
+                          child: Row(children: <Widget>[
+                            Spacer(),
+                            TextIconFlatButton(
+                                onPressed: () {}, text: "Join", icon: Icons.add)
+                          ])))
+                  : Container(),
+            ])));
   }
 }
