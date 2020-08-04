@@ -26,14 +26,14 @@ class _HomeViewState extends State<HomeView> {
             active: true,
             readableDate: "Happening now",
             readableTime: "",
-            subject: "Physics 101",
+            subject: "Physics",
             tutorName: "Arvinderjit Singh",
             tutorImage:
                 "https://s3-ap-southeast-1.amazonaws.com/engpeepingmoon/140919054722tiger-shroff.jpg"),
         UpcomingListItem(
             readableDate: "In 2 days",
             readableTime: "10 - 11AM",
-            subject: "AP Economics",
+            subject: "Economics",
             tutorName: "Jasmine Sylvia",
             tutorImage: "https://s3.envato.com/files/236560326/preview.jpg"),
         Container(

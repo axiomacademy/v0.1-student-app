@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 import '../../components/appbar.dart';
-import '../../components/list_items.dart';
+import '../../components/avatar.dart';
 
 class ScheduleView extends StatefulWidget {
   ScheduleView({Key key}) : super(key: key);
@@ -13,7 +13,7 @@ class ScheduleView extends StatefulWidget {
 
 class _ScheduleViewState extends State<ScheduleView>
     with TickerProviderStateMixin {
-  Map<DateTime, Map<String, dynamic>> _events;
+  Map<DateTime, List<Map<String, dynamic>>> _events;
   List _selectedEvents;
   AnimationController _animationController;
   CalendarController _calendarController;
@@ -24,57 +24,124 @@ class _ScheduleViewState extends State<ScheduleView>
     final _selectedDay = DateTime.now();
 
     _events = {
-      _selectedDay.subtract(Duration(days: 30)): {
-        "image": "Event A0",
-        "duration": "2 - 4pm",
-        "topic": "Physics",
-        "tutorname": "Arvinderjit Singh"
-      },
-      _selectedDay.subtract(Duration(days: 27)): ['Event A1'],
-      _selectedDay.subtract(Duration(days: 20)): [
-        'Event A2',
-        'Event B2',
-        'Event C2',
-        'Event D2'
+      _selectedDay.subtract(Duration(days: 30)): [
+        {
+          "image":
+              "https://s3-ap-southeast-1.amazonaws.com/engpeepingmoon/140919054722tiger-shroff.jpg",
+          "duration": "2 - 4pm",
+          "topic": "Physics",
+          "tutorname": "Arvinderjit Singh"
+        }
       ],
-      _selectedDay.subtract(Duration(days: 16)): ['Event A3', 'Event B3'],
-      _selectedDay.subtract(Duration(days: 10)): [
-        'Event A4',
-        'Event B4',
-        'Event C4'
+      _selectedDay.subtract(Duration(days: 27)): [
+        {
+          "image":
+              "https://s3-ap-southeast-1.amazonaws.com/engpeepingmoon/140919054722tiger-shroff.jpg",
+          "duration": "1 - 2pm",
+          "topic": "Physics",
+          "tutorname": "Arvinderjit Singh"
+        }
+      ],
+      _selectedDay.subtract(Duration(days: 20)): [
+        {
+          "image": "https://s3.envato.com/files/236560326/preview.jpg",
+          "duration": "2 - 4pm",
+          "topic": "Economics",
+          "tutorname": "Jasmine Sylvia"
+        },
+      ],
+      _selectedDay.subtract(Duration(days: 16)): [
+        {
+          "image":
+              "https://s3-ap-southeast-1.amazonaws.com/engpeepingmoon/140919054722tiger-shroff.jpg",
+          "duration": "2 - 4pm",
+          "topic": "Physics",
+          "tutorname": "Arvinderjit Singh"
+        },
+        {
+          "image": "https://s3.envato.com/files/236560326/preview.jpg",
+          "duration": "11am - 1pm",
+          "topic": "Economics",
+          "tutorname": "Jasmine Sylvia"
+        },
       ],
       _selectedDay.subtract(Duration(days: 4)): [
-        'Event A5',
-        'Event B5',
-        'Event C5'
+        {
+          "image":
+              "https://s3-ap-southeast-1.amazonaws.com/engpeepingmoon/140919054722tiger-shroff.jpg",
+          "duration": "2 - 4pm",
+          "topic": "Physics",
+          "tutorname": "Arvinderjit Singh"
+        },
+        {
+          "image": "https://s3.envato.com/files/236560326/preview.jpg",
+          "duration": "11am - 1pm",
+          "topic": "Economics",
+          "tutorname": "Jasmine Sylvia"
+        },
       ],
-      _selectedDay.subtract(Duration(days: 2)): ['Event A6', 'Event B6'],
-      _selectedDay: ['Event A7', 'Event B7', 'Event C7', 'Event D7'],
+      _selectedDay.subtract(Duration(days: 2)): [
+        {
+          "image": "https://s3.envato.com/files/236560326/preview.jpg",
+          "duration": "11am - 1pm",
+          "topic": "Economics",
+          "tutorname": "Jasmine Sylvia"
+        },
+      ],
+      _selectedDay: [
+        {
+          "image":
+              "https://s3-ap-southeast-1.amazonaws.com/engpeepingmoon/140919054722tiger-shroff.jpg",
+          "duration": "2 - 4pm",
+          "topic": "Physics",
+          "tutorname": "Arvinderjit Singh"
+        },
+        {
+          "image": "https://s3.envato.com/files/236560326/preview.jpg",
+          "duration": "11am - 1pm",
+          "topic": "Economics",
+          "tutorname": "Jasmine Sylvia"
+        },
+      ],
       _selectedDay.add(Duration(days: 1)): [
-        'Event A8',
-        'Event B8',
-        'Event C8',
-        'Event D8'
+        {
+          "image":
+              "https://s3-ap-southeast-1.amazonaws.com/engpeepingmoon/140919054722tiger-shroff.jpg",
+          "duration": "2 - 4pm",
+          "topic": "Physics",
+          "tutorname": "Arvinderjit Singh"
+        },
       ],
-      _selectedDay.add(Duration(days: 3)):
-          Set.from(['Event A9', 'Event A9', 'Event B9']).toList(),
       _selectedDay.add(Duration(days: 7)): [
-        'Event A10',
-        'Event B10',
-        'Event C10'
+        {
+          "image": "https://s3.envato.com/files/236560326/preview.jpg",
+          "duration": "11am - 1pm",
+          "topic": "Economics",
+          "tutorname": "Jasmine Sylvia"
+        },
       ],
-      _selectedDay.add(Duration(days: 11)): ['Event A11', 'Event B11'],
+      _selectedDay.add(Duration(days: 11)): [
+        {
+          "image":
+              "https://s3-ap-southeast-1.amazonaws.com/engpeepingmoon/140919054722tiger-shroff.jpg",
+          "duration": "2 - 4pm",
+          "topic": "Physics",
+          "tutorname": "Arvinderjit Singh"
+        },
+        {
+          "image": "https://s3.envato.com/files/236560326/preview.jpg",
+          "duration": "11am - 1pm",
+          "topic": "Economics",
+          "tutorname": "Jasmine Sylvia"
+        },
+      ],
       _selectedDay.add(Duration(days: 17)): [
-        'Event A12',
-        'Event B12',
-        'Event C12',
-        'Event D12'
-      ],
-      _selectedDay.add(Duration(days: 22)): ['Event A13', 'Event B13'],
-      _selectedDay.add(Duration(days: 26)): [
-        'Event A14',
-        'Event B14',
-        'Event C14'
+        {
+          "image": "https://s3.envato.com/files/236560326/preview.jpg",
+          "duration": "11am - 1pm",
+          "topic": "Economics",
+          "tutorname": "Jasmine Sylvia"
+        },
       ],
     };
 
@@ -105,10 +172,12 @@ class _ScheduleViewState extends State<ScheduleView>
               Padding(
                   padding: EdgeInsets.only(left: 10.0), child: AxiomAppBar()),
               _buildTableCalendar(),
+              Divider(),
+              ..._buildEventList()
             ])));
   }
 
-  /************************************** CALLBACKS *****************************/
+  ///************************************** CALLBACKS *****************************
 
   void _onDaySelected(DateTime day, List events) {
     print('CALLBACK: _onDaySelected');
@@ -127,7 +196,7 @@ class _ScheduleViewState extends State<ScheduleView>
     print('CALLBACK: _onCalendarCreated');
   }
 
-  /***************************** BUILDER UTILITIES *****************************/
+  ///***************************** BUILDER UTILITIES *****************************
   Widget _buildTableCalendar() {
     return TableCalendar(
       calendarController: _calendarController,
@@ -216,28 +285,72 @@ class _ScheduleViewState extends State<ScheduleView>
     );
   }
 
-  Widget _buildEventsMarker(DateTime date, List events) {
-    return AnimatedContainer(
-      duration: const Duration(milliseconds: 300),
-      decoration: BoxDecoration(
-        shape: BoxShape.rectangle,
-        color: _calendarController.isSelected(date)
-            ? Colors.brown[500]
-            : _calendarController.isToday(date)
-                ? Colors.brown[300]
-                : Colors.blue[400],
-      ),
-      width: 16.0,
-      height: 16.0,
-      child: Center(
-        child: Text(
-          '${events.length}',
-          style: TextStyle().copyWith(
-            color: Colors.white,
-            fontSize: 12.0,
-          ),
-        ),
-      ),
+  List<Widget> _buildEventList() {
+    return _selectedEvents
+        .map((event) => LessonListItem(
+            tutorImage: event["image"],
+            time: event["duration"],
+            subject: event["topic"],
+            tutorName: event["tutorname"]))
+        .toList();
+  }
+}
+
+class LessonListItem extends StatelessWidget {
+  final String tutorImage;
+  final String time;
+  final String subject;
+  final String tutorName;
+
+  LessonListItem(
+      {@required this.time,
+      @required this.tutorImage,
+      @required this.subject,
+      @required this.tutorName,
+      Key key})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.only(right: 10.0, left: 0.0),
+      child: Row(children: <Widget>[
+        UserAvatar(tutorImage, active: false),
+        Expanded(
+            child: Container(
+                margin: EdgeInsets.only(left: 14.0),
+                padding: EdgeInsets.only(top: 10.0, bottom: 15.0),
+                decoration: BoxDecoration(
+                    border: Border(
+                        bottom:
+                            BorderSide(color: Color(0xFFE0E0E0), width: 1.0))),
+                child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Padding(
+                          padding: EdgeInsets.only(top: 5.0, bottom: 5.0),
+                          child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: <Widget>[
+                                Text(time.toUpperCase(),
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .overline
+                                        .copyWith(
+                                            color: Color(0xFF666666),
+                                            fontWeight: FontWeight.w500))
+                              ])),
+                      Text(subject,
+                          style: Theme.of(context).textTheme.subtitle1),
+                      Padding(
+                          padding: EdgeInsets.only(top: 5.0),
+                          child: Text(tutorName,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyText2
+                                  .copyWith(color: Color(0xFF666666)))),
+                    ]))),
+      ]),
     );
   }
 }
