@@ -15,11 +15,14 @@ class _HomeViewState extends State<HomeView> {
   Widget build(BuildContext context) {
     return SafeArea(
         child: Container(
-      padding: EdgeInsets.only(left: 20.0, right: 10.0, top: 8.0),
+      padding: EdgeInsets.only(top: 8.0),
       child: ListView(shrinkWrap: true, children: <Widget>[
-        AxiomAppBar(),
         Container(
-            padding: EdgeInsets.only(top: 20.0, bottom: 0.0),
+            padding: EdgeInsets.only(left: 20.0, right: 10.0),
+            child: AxiomAppBar()),
+        Container(
+            padding: EdgeInsets.only(
+                left: 20.0, right: 10.0, top: 20.0, bottom: 5.0),
             child: Text("Upcoming Sessions",
                 style: Theme.of(context).textTheme.headline6)),
         UpcomingListItem(
@@ -37,7 +40,8 @@ class _HomeViewState extends State<HomeView> {
             tutorName: "Jasmine Sylvia",
             tutorImage: "https://s3.envato.com/files/236560326/preview.jpg"),
         Container(
-            padding: EdgeInsets.only(top: 20.0, bottom: 0.0),
+            padding: EdgeInsets.only(
+                left: 20.0, right: 10.0, top: 20.0, bottom: 5.0),
             child: Text("Recent Sessions",
                 style: Theme.of(context).textTheme.headline6)),
         SubjectListItem(
