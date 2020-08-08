@@ -57,8 +57,8 @@ class TextFlatButton extends StatelessWidget {
         height: 0, //wraps child's height
         child: FlatButton(
           onPressed: onPressed,
-          splashColor: Color(0xFFD7C6F3),
-          highlightColor: Color(0xFFF0E8FA),
+          splashColor: Color(0xFFF0E8FA),
+          highlightColor: Color(0x00FFFFFF),
           child: Text(
             text.toUpperCase(),
             style: Theme.of(context)

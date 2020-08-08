@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'home_view.dart';
 import 'schedule_view.dart';
+import "booking_bottom_sheet.dart";
 
 class MainPage extends StatefulWidget {
   MainPage({Key key}) : super(key: key);
@@ -24,7 +25,16 @@ class _MainPageState extends State<MainPage> {
           children: <Widget>[HomeView(), ScheduleView()]),
       floatingActionButton: FloatingActionButton.extended(
           splashColor: Color(0xFF8E58DF),
-          onPressed: () {},
+          onPressed: () {
+            showModalBottomSheet<void>(
+                context: context,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(15.0),
+                ),
+                builder: (BuildContext context) {
+                  return BookingBottomSheet();
+                });
+          },
           label: Text('Book'.toUpperCase()),
           icon: Icon(Icons.add),
           backgroundColor: Theme.of(context).primaryColor),
