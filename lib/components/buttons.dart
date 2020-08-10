@@ -40,6 +40,36 @@ class IconRaisedButton extends StatelessWidget {
   }
 }
 
+class TextRaisedButton extends StatelessWidget {
+  final VoidCallback onPressed;
+  final String text;
+
+  TextRaisedButton({@required this.onPressed, @required this.text, Key key})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return RaisedButton(
+        onPressed: onPressed,
+        color: Theme.of(context).primaryColor,
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(4.0))),
+        elevation: 1,
+        highlightColor: Color(0x00FFFFFF),
+        splashColor: Color(0xFF8E58DF),
+        highlightElevation: 3,
+        child: Row(children: <Widget>[
+          Spacer(),
+          Text(text.toUpperCase(),
+              style: Theme.of(context)
+                  .textTheme
+                  .button
+                  .copyWith(color: Colors.white)),
+          Spacer()
+        ]));
+  }
+}
+
 class TextFlatButton extends StatelessWidget {
   final VoidCallback onPressed;
   final String text;
