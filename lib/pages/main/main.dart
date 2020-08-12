@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'home_view.dart';
 import 'schedule_view.dart';
-import "booking_bottom_sheet.dart";
+import "../booking_bottom_sheet/main.dart";
 
 class MainPage extends StatefulWidget {
   MainPage({Key key}) : super(key: key);

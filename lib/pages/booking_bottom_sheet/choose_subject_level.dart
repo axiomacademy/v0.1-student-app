@@ -43,7 +43,11 @@ class ChooseSubjectLevel extends StatelessWidget {
           ])),
           Padding(
               padding: EdgeInsets.only(left: 20.0, right: 20.0),
-              child: TextRaisedButton(text: "Next", onPressed: () {}))
+              child: TextRaisedButton(
+                  text: "Next",
+                  onPressed: () {
+                    Navigator.of(context).pushNamed("book/time");
+                  }))
         ]));
   }
 }
