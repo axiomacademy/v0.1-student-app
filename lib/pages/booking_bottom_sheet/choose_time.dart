@@ -13,6 +13,45 @@ class ChooseTime extends StatefulWidget {
 class _ChooseTimeState extends State<ChooseTime> {
   String dropdownValue = 'One';
 
+  static const List<String> days = [
+    "Mon",
+    "Tue",
+    "Wed",
+    "Thu",
+    "Fri",
+    "Sat",
+    "Sun"
+  ];
+  static const List<String> times = [
+    "7am",
+    "8am",
+    "9am",
+    "10am",
+    "11am",
+    "12pm",
+    "1pm",
+    "2pm",
+    "3pm",
+    "4pm",
+    "5pm",
+    "6pm",
+    "7pm",
+    "8pm",
+    "9pn",
+    "10pm",
+    "11pm",
+    "12am",
+    "1am",
+    "2am",
+    "3am",
+    "4am",
+    "5am",
+    "6am"
+  ];
+
+  int selectedDay;
+  int selectedTime;
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -35,53 +74,76 @@ class _ChooseTimeState extends State<ChooseTime> {
                       .accentTextTheme
                       .overline
                       .copyWith(fontWeight: FontWeight.w600))),
-          GridView.count(
+          GridView.builder(
               shrinkWrap: true,
               padding: const EdgeInsets.only(
                   top: 10.0, left: 20.0, right: 20.0, bottom: 10.0),
-              crossAxisCount: 5,
-              childAspectRatio: 2,
-              crossAxisSpacing: 10.0,
-              mainAxisSpacing: 10.0,
-              children: <Widget>[
-                DateTimeSelector(text: "Mon", onPressed: () {}),
-                DateTimeSelector(text: "Tue", onPressed: () {}),
-                DateTimeSelector(text: "Wed", onPressed: () {}),
-                DateTimeSelector(text: "Thu", onPressed: () {}),
-                DateTimeSelector(text: "Fri", onPressed: () {}),
-                DateTimeSelector(text: "Sat", onPressed: () {}),
-                DateTimeSelector(text: "Sun", onPressed: () {}),
-              ]),
-          Divider(),
-          Expanded(
-              child: GridView.count(
-                  padding:
-                      const EdgeInsets.only(top: 10.0, left: 20.0, right: 20.0),
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 5,
                   childAspectRatio: 2,
                   crossAxisSpacing: 10.0,
-                  mainAxisSpacing: 10.0,
-                  children: <Widget>[
-                DateTimeSelector(text: "Mon", onPressed: () {}),
-                DateTimeSelector(text: "Tue", onPressed: () {}),
-                DateTimeSelector(text: "Wed", onPressed: () {}),
-                DateTimeSelector(text: "Thu", onPressed: () {}),
-                DateTimeSelector(text: "Fri", onPressed: () {}),
-                DateTimeSelector(text: "Sat", onPressed: () {}),
-                DateTimeSelector(text: "Sun", onPressed: () {}),
-              ])),
+                  mainAxisSpacing: 10.0),
+              itemCount: days.length,
+              itemBuilder: (BuildContext context, int index) {
+                return (selectedDay == index)
+                    ? DateTimeSelector(
+                        text: days[index], selected: true, onPressed: () {})
+                    : DateTimeSelector(
+                        text: days[index],
+                        selected: false,
+                        onPressed: () {
+                          setState(() {
+                            selectedDay = index;
+                          });
+                        });
+              }),
+          Divider(),
+          Expanded(
+            child: GridView.builder(
+                shrinkWrap: true,
+                padding: const EdgeInsets.only(
+                    top: 10.0, left: 20.0, right: 20.0, bottom: 10.0),
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 5,
+                    childAspectRatio: 2,
+                    crossAxisSpacing: 10.0,
+                    mainAxisSpacing: 10.0),
+                itemCount: times.length,
+                itemBuilder: (BuildContext context, int index) {
+                  return (selectedTime == index)
+                      ? DateTimeSelector(
+                          text: times[index], selected: true, onPressed: () {})
+                      : DateTimeSelector(
+                          text: times[index],
+                          selected: false,
+                          onPressed: () {
+                            setState(() {
+                              selectedTime = index;
+                            });
+                          });
+                }),
+          ),
           Padding(
               padding: EdgeInsets.only(left: 20.0, right: 20.0),
-              child: TextRaisedButton(text: "Next", onPressed: () {}))
+              child: TextRaisedButton(
+                  text: "Next",
+                  onPressed: () {
+                    Navigator.of(context).pushNamed("book/match");
+                  }))
         ]));
   }
 }
 
 class DateTimeSelector extends StatelessWidget {
   final String text;
+  final bool selected;
   final VoidCallback onPressed;
 
-  DateTimeSelector({@required this.text, @required this.onPressed, Key key})
+  DateTimeSelector(
+      {@required this.text,
+      @required this.onPressed,
+      this.selected = false,
+      Key key})
       : super(key: key);
 
   @override
@@ -94,6 +156,7 @@ class DateTimeSelector extends StatelessWidget {
         height: 10.0, //wraps child's height
         child: FlatButton(
           onPressed: onPressed,
+          color: (selected) ? Color(0xFFF0E8FA) : Colors.white,
           splashColor: Color(0xFFF0E8FA),
           highlightColor: Color(0x00FFFFFF),
           shape: RoundedRectangleBorder(
