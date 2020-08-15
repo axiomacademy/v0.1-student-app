@@ -3,7 +3,30 @@ import 'package:flutter/material.dart';
 import 'pulldown_handle.dart';
 import '../../components/buttons.dart';
 
-class ChooseSubjectLevel extends StatelessWidget {
+class ChooseSubjectLevel extends StatefulWidget {
+  final void Function(String option) onChoose;
+  final int step;
+  final int totalSteps;
+
+  ChooseSubjectLevel(
+      {@required this.onChoose,
+      @required this.step,
+      @required this.totalSteps,
+      Key key})
+      : super(key: key);
+
+  @override
+  _ChooseSubjectLevelState createState() => _ChooseSubjectLevelState();
+}
+
+class _ChooseSubjectLevelState extends State<ChooseSubjectLevel> {
+  static const List<String> subjectLevels = [
+    "Cambridge 'A' Levels",
+    "Cambridge 'O' Levels",
+    "International Baccaulerate"
+  ];
+  int selectedSubjectLevel;
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -13,6 +36,7 @@ class ChooseSubjectLevel extends StatelessWidget {
         ),
         child: SafeArea(
             child: Column(
+                mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
               PulldownHandle(),
@@ -27,32 +51,37 @@ class ChooseSubjectLevel extends StatelessWidget {
               Padding(
                   padding:
                       EdgeInsets.only(left: 20.0, right: 20.0, bottom: 10.0),
-                  child: Text("Step 2 of 4".toUpperCase(),
+                  child: Text(
+                      "Step ${widget.step} of ${widget.totalSteps}"
+                          .toUpperCase(),
                       style: Theme.of(context)
                           .accentTextTheme
                           .overline
                           .copyWith(fontWeight: FontWeight.w600))),
-              Expanded(
-                  child: ListView(children: [
-                SubjectLevelOptionsTile(
-                  title: "GCE 'A' Levels",
-                  onTap: () {},
-                ),
-                SubjectLevelOptionsTile(
-                  title: "GCE 'O' Levels",
-                  onTap: () {},
-                ),
-                SubjectLevelOptionsTile(
-                  title: "International Baccaulerate",
-                  onTap: () {},
-                ),
-              ])),
+              ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: 3,
+                  itemBuilder: (BuildContext context, int index) {
+                    return (selectedSubjectLevel == index)
+                        ? SubjectLevelOptionsTile(
+                            title: subjectLevels[index],
+                            selected: true,
+                            onTap: () {})
+                        : SubjectLevelOptionsTile(
+                            title: subjectLevels[index],
+                            selected: false,
+                            onTap: () {
+                              setState(() {
+                                selectedSubjectLevel = index;
+                              });
+                            });
+                  }),
               Padding(
-                  padding: EdgeInsets.only(left: 20.0, right: 20.0),
+                  padding: EdgeInsets.only(top: 20.0, left: 20.0, right: 20.0),
                   child: TextRaisedButton(
                       text: "Next",
                       onPressed: () {
-                        Navigator.of(context).pushNamed("book/time");
+                        widget.onChoose(subjectLevels[selectedSubjectLevel]);
                       }))
             ])));
   }
@@ -60,15 +89,18 @@ class ChooseSubjectLevel extends StatelessWidget {
 
 class SubjectLevelOptionsTile extends StatelessWidget {
   final String title;
+  final bool selected;
   final VoidCallback onTap;
 
-  SubjectLevelOptionsTile({@required this.title, @required this.onTap});
+  SubjectLevelOptionsTile(
+      {@required this.title, @required this.selected, @required this.onTap});
 
   @override
   Widget build(BuildContext context) {
     return Padding(
         padding: EdgeInsets.only(left: 10.0, right: 10.0),
         child: Material(
+            color: (selected) ? Color(0xFFF0E8FA) : Color(0xFFFAFAFA),
             child: Ink(
                 child: InkWell(
                     customBorder: RoundedRectangleBorder(

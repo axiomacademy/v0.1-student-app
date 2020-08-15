@@ -4,7 +4,24 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'pulldown_handle.dart';
 import '../../components/buttons.dart';
 
-class Matching extends StatelessWidget {
+class Matching extends StatefulWidget {
+  final void Function(String tutors) onComplete;
+
+  Matching({@required this.onComplete, Key key}) : super(key: key);
+
+  @override
+  _MatchingState createState() => _MatchingState();
+}
+
+class _MatchingState extends State<Matching> {
+  @override
+  void initState() {
+    super.initState();
+    Future.delayed(const Duration(milliseconds: 5000), () {
+      widget.onComplete("done");
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -14,6 +31,7 @@ class Matching extends StatelessWidget {
         ),
         child: SafeArea(
             child: Column(
+                mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
               PulldownHandle(),
@@ -23,19 +41,21 @@ class Matching extends StatelessWidget {
                     Spacer(),
                     TextFlatButton(text: "Cancel", onPressed: () {}),
                   ])),
-              Expanded(
+              Container(
+                  height: 200.0,
                   child: Center(
                       child: Column(
                           mainAxisSize: MainAxisSize.min,
                           children: <Widget>[
-                    SpinKitFadingCube(
-                        color: Theme.of(context).primaryColor, size: 50.0),
-                    Padding(
-                        padding: EdgeInsets.only(top: 40.0),
-                        child: Text("Finding awesome tutors",
-                            style:
-                                Theme.of(context).primaryTextTheme.headline6))
-                  ])))
+                        SpinKitFadingCube(
+                            color: Theme.of(context).primaryColor, size: 50.0),
+                        Padding(
+                            padding: EdgeInsets.only(top: 40.0),
+                            child: Text("Finding awesome tutors",
+                                style: Theme.of(context)
+                                    .primaryTextTheme
+                                    .headline6))
+                      ])))
             ])));
   }
 }

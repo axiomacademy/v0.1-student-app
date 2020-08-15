@@ -24,6 +24,7 @@ class _SuccessState extends State<Success> {
         ),
         child: SafeArea(
             child: Column(
+                mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
               PulldownHandle(),
@@ -37,18 +38,17 @@ class _SuccessState extends State<Success> {
                   ])),
               Padding(
                   padding:
-                      EdgeInsets.only(left: 20.0, right: 20.0, bottom: 10.0),
+                      EdgeInsets.only(left: 20.0, right: 20.0, bottom: 0.0),
                   child: Text(overline.toUpperCase(),
                       style: Theme.of(context)
                           .accentTextTheme
                           .overline
                           .copyWith(fontWeight: FontWeight.w600))),
               Padding(
-                  padding: EdgeInsets.only(left: 20.0, right: 20.0, top: 0.0),
+                  padding: EdgeInsets.only(left: 20.0, right: 20.0, top: 10.0),
                   child: TutorProfile()),
-              Spacer(),
               Padding(
-                  padding: EdgeInsets.only(left: 20.0, right: 20.0),
+                  padding: EdgeInsets.only(top: 20.0, left: 20.0, right: 20.0),
                   child: TextRaisedButton(
                       text: "Start (10s)",
                       onPressed: () {

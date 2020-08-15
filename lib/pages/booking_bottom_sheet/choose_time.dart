@@ -4,15 +4,22 @@ import 'pulldown_handle.dart';
 import '../../components/buttons.dart';
 
 class ChooseTime extends StatefulWidget {
-  ChooseTime({Key key}) : super(key: key);
+  final void Function(String option) onChoose;
+  final int step;
+  final int totalSteps;
+
+  ChooseTime(
+      {@required this.onChoose,
+      @required this.step,
+      @required this.totalSteps,
+      Key key})
+      : super(key: key);
 
   @override
   _ChooseTimeState createState() => _ChooseTimeState();
 }
 
 class _ChooseTimeState extends State<ChooseTime> {
-  String dropdownValue = 'One';
-
   static const List<String> days = [
     "Mon",
     "Tue",
@@ -61,6 +68,7 @@ class _ChooseTimeState extends State<ChooseTime> {
         ),
         child: SafeArea(
             child: Column(
+                mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
               PulldownHandle(),
@@ -75,7 +83,9 @@ class _ChooseTimeState extends State<ChooseTime> {
               Padding(
                   padding:
                       EdgeInsets.only(left: 20.0, right: 20.0, bottom: 10.0),
-                  child: Text("Step 3 of 4".toUpperCase(),
+                  child: Text(
+                      "Step ${widget.step} of ${widget.totalSteps}"
+                          .toUpperCase(),
                       style: Theme.of(context)
                           .accentTextTheme
                           .overline
@@ -104,39 +114,37 @@ class _ChooseTimeState extends State<ChooseTime> {
                             });
                   }),
               Divider(),
-              Expanded(
-                child: GridView.builder(
-                    shrinkWrap: true,
-                    padding: const EdgeInsets.only(
-                        top: 10.0, left: 20.0, right: 20.0, bottom: 10.0),
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 5,
-                        childAspectRatio: 2,
-                        crossAxisSpacing: 10.0,
-                        mainAxisSpacing: 10.0),
-                    itemCount: times.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      return (selectedTime == index)
-                          ? DateTimeSelector(
-                              text: times[index],
-                              selected: true,
-                              onPressed: () {})
-                          : DateTimeSelector(
-                              text: times[index],
-                              selected: false,
-                              onPressed: () {
-                                setState(() {
-                                  selectedTime = index;
-                                });
+              GridView.builder(
+                  shrinkWrap: true,
+                  padding: const EdgeInsets.only(
+                      top: 10.0, left: 20.0, right: 20.0, bottom: 10.0),
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 5,
+                      childAspectRatio: 2,
+                      crossAxisSpacing: 10.0,
+                      mainAxisSpacing: 10.0),
+                  itemCount: times.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    return (selectedTime == index)
+                        ? DateTimeSelector(
+                            text: times[index],
+                            selected: true,
+                            onPressed: () {})
+                        : DateTimeSelector(
+                            text: times[index],
+                            selected: false,
+                            onPressed: () {
+                              setState(() {
+                                selectedTime = index;
                               });
-                    }),
-              ),
+                            });
+                  }),
               Padding(
-                  padding: EdgeInsets.only(left: 20.0, right: 20.0),
+                  padding: EdgeInsets.only(top: 20.0, left: 20.0, right: 20.0),
                   child: TextRaisedButton(
                       text: "Next",
                       onPressed: () {
-                        Navigator.of(context).pushNamed("book/tutor");
+                        widget.onChoose(times[selectedTime]);
                       }))
             ])));
   }

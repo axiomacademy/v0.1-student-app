@@ -4,7 +4,26 @@ import 'pulldown_handle.dart';
 import '../../components/buttons.dart';
 import '../../components/avatar.dart';
 
-class ChooseSubject extends StatelessWidget {
+class ChooseSubject extends StatefulWidget {
+  final void Function(String option) onChoose;
+  final int step;
+  final int totalSteps;
+
+  ChooseSubject(
+      {@required this.onChoose,
+      @required this.step,
+      @required this.totalSteps,
+      Key key})
+      : super(key: key);
+
+  @override
+  _ChooseSubjectState createState() => _ChooseSubjectState();
+}
+
+class _ChooseSubjectState extends State<ChooseSubject> {
+  static const List<String> subjects = ["Physics", "Mathematics"];
+  int selectedSubject;
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -15,6 +34,7 @@ class ChooseSubject extends StatelessWidget {
         child: SafeArea(
             child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
               PulldownHandle(),
               Container(
@@ -28,37 +48,49 @@ class ChooseSubject extends StatelessWidget {
               Padding(
                   padding:
                       EdgeInsets.only(left: 20.0, right: 20.0, bottom: 10.0),
-                  child: Text("Step 1 of 4".toUpperCase(),
+                  child: Text(
+                      "Step ${widget.step} of ${widget.totalSteps}"
+                          .toUpperCase(),
                       style: Theme.of(context)
                           .accentTextTheme
                           .overline
                           .copyWith(fontWeight: FontWeight.w600))),
-              Expanded(
-                  child: ListView(children: [
-                SubjectOptionsTile(
-                  subject: "Physics",
-                  onTap: () {
-                    Navigator.of(context).pushNamed("book/subjectlevel");
-                  },
-                ),
-                SubjectOptionsTile(
-                    subject: "Mathematics",
-                    onTap: () {
-                      Navigator.of(context).pushNamed("book/subjectlevel");
-                    }),
-              ])),
+              ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: 2,
+                  itemBuilder: (BuildContext context, int index) {
+                    return (selectedSubject == index)
+                        ? SubjectOptionsTile(
+                            subject: subjects[index],
+                            selected: true,
+                            onTap: () {})
+                        : SubjectOptionsTile(
+                            subject: subjects[index],
+                            selected: false,
+                            onTap: () {
+                              setState(() {
+                                selectedSubject = index;
+                              });
+                            });
+                  }),
               Padding(
-                  padding: EdgeInsets.only(left: 20.0, right: 20.0),
-                  child: TextRaisedButton(text: "Next", onPressed: () {}))
+                  padding: EdgeInsets.only(top: 20.0, left: 20.0, right: 20.0),
+                  child: TextRaisedButton(
+                      text: "Next",
+                      onPressed: () {
+                        widget.onChoose(subjects[selectedSubject]);
+                      }))
             ])));
   }
 }
 
 class SubjectOptionsTile extends StatelessWidget {
   final String subject;
+  final bool selected;
   final VoidCallback onTap;
 
-  SubjectOptionsTile({@required this.subject, @required this.onTap});
+  SubjectOptionsTile(
+      {@required this.subject, @required this.selected, @required this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -66,6 +98,7 @@ class SubjectOptionsTile extends StatelessWidget {
         padding: EdgeInsets.only(left: 10.0, right: 10.0),
         child: Material(
             child: Ink(
+                color: (selected) ? Color(0xFFF0E8FA) : Color(0xFFFAFAFA),
                 child: InkWell(
                     customBorder: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10),

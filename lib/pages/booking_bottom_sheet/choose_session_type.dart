@@ -4,6 +4,10 @@ import '../../components/buttons.dart';
 import 'pulldown_handle.dart';
 
 class ChooseSessionType extends StatelessWidget {
+  final void Function(bool scheduled) onChoose;
+
+  ChooseSessionType({@required this.onChoose, Key key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -13,6 +17,7 @@ class ChooseSessionType extends StatelessWidget {
         ),
         child: SafeArea(
             child: Column(
+                mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
               PulldownHandle(),
@@ -24,32 +29,31 @@ class ChooseSessionType extends StatelessWidget {
                     Spacer(),
                     TextFlatButton(text: "Cancel", onPressed: () {}),
                   ])),
-              Expanded(
-                  child: ListView(children: <Widget>[
-                BookingOptionsTile(
+              ListView(shrinkWrap: true, children: <Widget>[
+                _BookingOptionsTile(
                   title: "On-demand tutoring  ⌛",
                   subtitle: "Get immediate help right now",
                   onTap: () {
-                    Navigator.of(context).pushNamed("book/subject");
+                    onChoose(false);
                   },
                 ),
-                BookingOptionsTile(
+                _BookingOptionsTile(
                     title: "Scheduled Tutoring ⌚",
                     subtitle: "Schedule a repeated session with a tutor",
                     onTap: () {
-                      Navigator.of(context).pushNamed("book/subject");
+                      onChoose(true);
                     }),
-              ])),
+              ]),
             ])));
   }
 }
 
-class BookingOptionsTile extends StatelessWidget {
+class _BookingOptionsTile extends StatelessWidget {
   final String title;
   final String subtitle;
   final VoidCallback onTap;
 
-  BookingOptionsTile(
+  _BookingOptionsTile(
       {@required this.title, @required this.subtitle, @required this.onTap});
 
   @override
