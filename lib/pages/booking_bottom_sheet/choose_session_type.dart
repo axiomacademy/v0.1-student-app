@@ -6,36 +6,41 @@ import 'pulldown_handle.dart';
 class ChooseSessionType extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-        child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-          PulldownHandle(),
-          Container(
-              padding: EdgeInsets.only(left: 20.0, right: 10.0, top: 10.0),
-              child: Row(children: <Widget>[
-                Text("Book a session",
-                    style: Theme.of(context).primaryTextTheme.headline5),
-                Spacer(),
-                TextFlatButton(text: "Cancel", onPressed: () {}),
+    return Container(
+        decoration: BoxDecoration(
+          color: Color(0xFFFAFAFA),
+          borderRadius: BorderRadius.circular(15.0),
+        ),
+        child: SafeArea(
+            child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+              PulldownHandle(),
+              Container(
+                  padding: EdgeInsets.only(left: 20.0, right: 10.0, top: 10.0),
+                  child: Row(children: <Widget>[
+                    Text("Book a session",
+                        style: Theme.of(context).primaryTextTheme.headline5),
+                    Spacer(),
+                    TextFlatButton(text: "Cancel", onPressed: () {}),
+                  ])),
+              Expanded(
+                  child: ListView(children: <Widget>[
+                BookingOptionsTile(
+                  title: "On-demand tutoring  ⌛",
+                  subtitle: "Get immediate help right now",
+                  onTap: () {
+                    Navigator.of(context).pushNamed("book/subject");
+                  },
+                ),
+                BookingOptionsTile(
+                    title: "Scheduled Tutoring ⌚",
+                    subtitle: "Schedule a repeated session with a tutor",
+                    onTap: () {
+                      Navigator.of(context).pushNamed("book/subject");
+                    }),
               ])),
-          Expanded(
-              child: ListView(children: <Widget>[
-            BookingOptionsTile(
-              title: "On-demand tutoring  ⌛",
-              subtitle: "Get immediate help right now",
-              onTap: () {
-                Navigator.of(context).pushNamed("book/subject");
-              },
-            ),
-            BookingOptionsTile(
-                title: "Scheduled Tutoring ⌚",
-                subtitle: "Schedule a repeated session with a tutor",
-                onTap: () {
-                  Navigator.of(context).pushNamed("book/subject");
-                }),
-          ])),
-        ]));
+            ])));
   }
 }
 

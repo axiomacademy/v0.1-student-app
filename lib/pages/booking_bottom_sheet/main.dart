@@ -4,7 +4,9 @@ import 'choose_session_type.dart';
 import 'choose_subject.dart';
 import 'choose_subject_level.dart';
 import 'choose_time.dart';
+import 'choose_tutor.dart';
 import 'matching.dart';
+import 'success.dart';
 
 class BookingBottomSheet extends StatelessWidget {
   final navigatorKey = GlobalKey<NavigatorState>();
@@ -30,6 +32,12 @@ class BookingBottomSheet extends StatelessWidget {
               break;
             case "book/match":
               builder = (BuildContext _) => Matching();
+              break;
+            case "book/tutor":
+              builder = (BuildContext _) => ChooseTutor();
+              break;
+            case "book/success":
+              builder = (BuildContext _) => Success();
               break;
             default:
               throw Exception('Invalid route: ${settings.name}');

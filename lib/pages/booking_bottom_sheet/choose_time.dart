@@ -54,83 +54,91 @@ class _ChooseTimeState extends State<ChooseTime> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-        child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-          PulldownHandle(),
-          Container(
-              padding: EdgeInsets.only(left: 20.0, right: 10.0, top: 10.0),
-              child: Row(children: <Widget>[
-                Text("Choose a time",
-                    style: Theme.of(context).primaryTextTheme.headline5),
-                Spacer(),
-                TextFlatButton(text: "Cancel", onPressed: () {}),
-              ])),
-          Padding(
-              padding: EdgeInsets.only(left: 20.0, right: 20.0, bottom: 10.0),
-              child: Text("Step 3 of 4".toUpperCase(),
-                  style: Theme.of(context)
-                      .accentTextTheme
-                      .overline
-                      .copyWith(fontWeight: FontWeight.w600))),
-          GridView.builder(
-              shrinkWrap: true,
-              padding: const EdgeInsets.only(
-                  top: 10.0, left: 20.0, right: 20.0, bottom: 10.0),
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 5,
-                  childAspectRatio: 2,
-                  crossAxisSpacing: 10.0,
-                  mainAxisSpacing: 10.0),
-              itemCount: days.length,
-              itemBuilder: (BuildContext context, int index) {
-                return (selectedDay == index)
-                    ? DateTimeSelector(
-                        text: days[index], selected: true, onPressed: () {})
-                    : DateTimeSelector(
-                        text: days[index],
-                        selected: false,
-                        onPressed: () {
-                          setState(() {
-                            selectedDay = index;
-                          });
-                        });
-              }),
-          Divider(),
-          Expanded(
-            child: GridView.builder(
-                shrinkWrap: true,
-                padding: const EdgeInsets.only(
-                    top: 10.0, left: 20.0, right: 20.0, bottom: 10.0),
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 5,
-                    childAspectRatio: 2,
-                    crossAxisSpacing: 10.0,
-                    mainAxisSpacing: 10.0),
-                itemCount: times.length,
-                itemBuilder: (BuildContext context, int index) {
-                  return (selectedTime == index)
-                      ? DateTimeSelector(
-                          text: times[index], selected: true, onPressed: () {})
-                      : DateTimeSelector(
-                          text: times[index],
-                          selected: false,
-                          onPressed: () {
-                            setState(() {
-                              selectedTime = index;
+    return Container(
+        decoration: BoxDecoration(
+          color: Color(0xFFFAFAFA),
+          borderRadius: BorderRadius.circular(15.0),
+        ),
+        child: SafeArea(
+            child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+              PulldownHandle(),
+              Container(
+                  padding: EdgeInsets.only(left: 20.0, right: 10.0, top: 10.0),
+                  child: Row(children: <Widget>[
+                    Text("Choose a time",
+                        style: Theme.of(context).primaryTextTheme.headline5),
+                    Spacer(),
+                    TextFlatButton(text: "Cancel", onPressed: () {}),
+                  ])),
+              Padding(
+                  padding:
+                      EdgeInsets.only(left: 20.0, right: 20.0, bottom: 10.0),
+                  child: Text("Step 3 of 4".toUpperCase(),
+                      style: Theme.of(context)
+                          .accentTextTheme
+                          .overline
+                          .copyWith(fontWeight: FontWeight.w600))),
+              GridView.builder(
+                  shrinkWrap: true,
+                  padding: const EdgeInsets.only(
+                      top: 10.0, left: 20.0, right: 20.0, bottom: 10.0),
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 5,
+                      childAspectRatio: 2,
+                      crossAxisSpacing: 10.0,
+                      mainAxisSpacing: 10.0),
+                  itemCount: days.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    return (selectedDay == index)
+                        ? DateTimeSelector(
+                            text: days[index], selected: true, onPressed: () {})
+                        : DateTimeSelector(
+                            text: days[index],
+                            selected: false,
+                            onPressed: () {
+                              setState(() {
+                                selectedDay = index;
+                              });
                             });
-                          });
-                }),
-          ),
-          Padding(
-              padding: EdgeInsets.only(left: 20.0, right: 20.0),
-              child: TextRaisedButton(
-                  text: "Next",
-                  onPressed: () {
-                    Navigator.of(context).pushNamed("book/match");
-                  }))
-        ]));
+                  }),
+              Divider(),
+              Expanded(
+                child: GridView.builder(
+                    shrinkWrap: true,
+                    padding: const EdgeInsets.only(
+                        top: 10.0, left: 20.0, right: 20.0, bottom: 10.0),
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 5,
+                        childAspectRatio: 2,
+                        crossAxisSpacing: 10.0,
+                        mainAxisSpacing: 10.0),
+                    itemCount: times.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      return (selectedTime == index)
+                          ? DateTimeSelector(
+                              text: times[index],
+                              selected: true,
+                              onPressed: () {})
+                          : DateTimeSelector(
+                              text: times[index],
+                              selected: false,
+                              onPressed: () {
+                                setState(() {
+                                  selectedTime = index;
+                                });
+                              });
+                    }),
+              ),
+              Padding(
+                  padding: EdgeInsets.only(left: 20.0, right: 20.0),
+                  child: TextRaisedButton(
+                      text: "Next",
+                      onPressed: () {
+                        Navigator.of(context).pushNamed("book/tutor");
+                      }))
+            ])));
   }
 }
 

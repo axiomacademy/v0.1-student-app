@@ -27,6 +27,8 @@ class _MainPageState extends State<MainPage> {
           splashColor: Color(0xFF8E58DF),
           onPressed: () {
             showModalBottomSheet<void>(
+                backgroundColor: Colors.transparent,
+                isScrollControlled: true,
                 context: context,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(15.0),

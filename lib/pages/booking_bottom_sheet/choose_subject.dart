@@ -7,44 +7,50 @@ import '../../components/avatar.dart';
 class ChooseSubject extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-        child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-          PulldownHandle(),
-          Container(
-              padding: EdgeInsets.only(left: 20.0, right: 10.0, top: 10.0),
-              child: Row(children: <Widget>[
-                Text("Choose a subject",
-                    style: Theme.of(context).primaryTextTheme.headline5),
-                Spacer(),
-                TextFlatButton(text: "Cancel", onPressed: () {}),
+    return Container(
+        decoration: BoxDecoration(
+          color: Color(0xFFFAFAFA),
+          borderRadius: BorderRadius.circular(15.0),
+        ),
+        child: SafeArea(
+            child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+              PulldownHandle(),
+              Container(
+                  padding: EdgeInsets.only(left: 20.0, right: 10.0, top: 10.0),
+                  child: Row(children: <Widget>[
+                    Text("Choose a subject",
+                        style: Theme.of(context).primaryTextTheme.headline5),
+                    Spacer(),
+                    TextFlatButton(text: "Cancel", onPressed: () {}),
+                  ])),
+              Padding(
+                  padding:
+                      EdgeInsets.only(left: 20.0, right: 20.0, bottom: 10.0),
+                  child: Text("Step 1 of 4".toUpperCase(),
+                      style: Theme.of(context)
+                          .accentTextTheme
+                          .overline
+                          .copyWith(fontWeight: FontWeight.w600))),
+              Expanded(
+                  child: ListView(children: [
+                SubjectOptionsTile(
+                  subject: "Physics",
+                  onTap: () {
+                    Navigator.of(context).pushNamed("book/subjectlevel");
+                  },
+                ),
+                SubjectOptionsTile(
+                    subject: "Mathematics",
+                    onTap: () {
+                      Navigator.of(context).pushNamed("book/subjectlevel");
+                    }),
               ])),
-          Padding(
-              padding: EdgeInsets.only(left: 20.0, right: 20.0, bottom: 10.0),
-              child: Text("Step 1 of 4".toUpperCase(),
-                  style: Theme.of(context)
-                      .accentTextTheme
-                      .overline
-                      .copyWith(fontWeight: FontWeight.w600))),
-          Expanded(
-              child: ListView(children: [
-            SubjectOptionsTile(
-              subject: "Physics",
-              onTap: () {
-                Navigator.of(context).pushNamed("book/subjectlevel");
-              },
-            ),
-            SubjectOptionsTile(
-                subject: "Mathematics",
-                onTap: () {
-                  Navigator.of(context).pushNamed("book/subjectlevel");
-                }),
-          ])),
-          Padding(
-              padding: EdgeInsets.only(left: 20.0, right: 20.0),
-              child: TextRaisedButton(text: "Next", onPressed: () {}))
-        ]));
+              Padding(
+                  padding: EdgeInsets.only(left: 20.0, right: 20.0),
+                  child: TextRaisedButton(text: "Next", onPressed: () {}))
+            ])));
   }
 }
 

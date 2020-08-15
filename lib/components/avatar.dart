@@ -55,7 +55,7 @@ class SubjectAvatar extends StatelessWidget {
         height: height,
         child: Container(
             decoration: BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                borderRadius: BorderRadius.all(Radius.circular(width / 5)),
                 gradient: LinearGradient(
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
@@ -68,6 +68,6 @@ class SubjectAvatar extends StatelessWidget {
                     style: Theme.of(context)
                         .textTheme
                         .button
-                        .copyWith(color: Colors.white)))));
+                        .copyWith(color: Colors.white, fontSize: 10)))));
   }
 }
