@@ -27,6 +27,7 @@ dependencies:
   flutter_svg: ^0.18.0
   table_calendar: ^2.2.3
   flutter_spinkit: "^4.1.2"
+  dash_chat: ^1.1.14
 
 dev_dependencies:
   flutter_test:
