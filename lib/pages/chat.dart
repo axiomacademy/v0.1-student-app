@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:dash_chat/dash_chat.dart';
 
 import '../components/avatar.dart';
 
@@ -50,6 +51,28 @@ class _ChatPageState extends State<ChatPage> {
                           color: Colors.white,
                           onPressed: () {}),
                     ])))),
-            body: Container(child: Center(child: Text("ChatWinddow")))));
+            body: DashChat(
+              user: ChatUser(
+                name: "Jhon Doe",
+                uid: "xxxxxxxxx",
+                avatar:
+                    "https://www.wrappixel.com/ampleadmin/assets/images/users/4.jpg",
+              ),
+              messages: <ChatMessage>[
+                ChatMessage(
+                  text: "Hello",
+                  user: ChatUser(
+                    name: "Fayeed",
+                    uid: "123456789",
+                    avatar:
+                        "https://www.wrappixel.com/ampleadmin/assets/images/users/4.jpg",
+                  ),
+                  createdAt: DateTime.now(),
+                  image:
+                      "http://www.sclance.com/images/picture/Picture_753248.jpg",
+                )
+              ],
+              onSend: (message) {},
+            )));
   }
 }
