@@ -111,6 +111,8 @@ class _ChatPageState extends State<ChatPage> {
                         borderRadius: BorderRadius.all(Radius.circular(10.0))),
                     scrollToBottomStyle: ScrollToBottomStyle(
                         bottom: 100.0, left: 20.0, right: 20.0),
+                    inputDecoration: InputDecoration.collapsed(
+                        hintText: "Add message here..."),
                     inputFooterBuilder: () {
                       return SafeArea(
                           child: Container(

@@ -45,6 +45,7 @@ class TutorProfile extends StatelessWidget {
         ),
         child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               Row(children: <Widget>[
                 UserAvatar(image, width: 75, height: 75),

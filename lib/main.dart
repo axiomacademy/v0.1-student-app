@@ -4,6 +4,7 @@ import 'pages/welcome.dart';
 import 'pages/login.dart';
 import 'pages/register.dart';
 import 'pages/chat.dart';
+import 'pages/tutor.dart';
 import 'pages/main/main.dart';
 
 import 'themer.dart';
@@ -19,12 +20,13 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
         title: 'Axiom',
         theme: buildTheme(),
-        home: ChatPage(),
+        home: TutorPage(),
         routes: {
           "/welcome": (context) => WelcomePage(),
           "/login": (context) => LoginPage(),
           "/register": (context) => RegisterPage(),
           "/chat": (context) => ChatPage(),
+          "/tutor": (context) => TutorPage(),
         });
   }
 }

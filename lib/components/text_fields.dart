@@ -35,12 +35,16 @@ class FilledTextFormField extends StatelessWidget {
   final Icon suffixIcon;
   final Icon prefixIcon;
   final String Function(String) validator;
+  final Color fillColor;
+  final Color textColor;
 
   FilledTextFormField(
       {@required this.labelText,
       @required this.validator,
       this.suffixIcon,
       this.prefixIcon,
+      this.fillColor = const Color(0x14000000),
+      this.textColor = const Color(0xB0000000),
       Key key})
       : super(key: key);
 
@@ -50,7 +54,7 @@ class FilledTextFormField extends StatelessWidget {
       decoration: InputDecoration(
         isDense: true,
         filled: true,
-        fillColor: Color(0xFFECECEC),
+        fillColor: fillColor,
         contentPadding: EdgeInsets.all(15),
         border: OutlineInputBorder(
             borderSide: BorderSide.none,
@@ -62,7 +66,9 @@ class FilledTextFormField extends StatelessWidget {
         hintText: labelText,
         suffixIcon: suffixIcon ?? null,
         prefixIcon: prefixIcon ?? null,
+        hintStyle: TextStyle(color: textColor),
       ),
+      style: TextStyle(color: textColor),
       validator: validator,
     );
   }
