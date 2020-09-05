@@ -43,9 +43,11 @@ class UserAvatar extends StatelessWidget {
 
 class SubjectAvatar extends StatelessWidget {
   final double width, height;
+  final double fontSize;
   final String subject;
 
-  SubjectAvatar(this.subject, {this.width = 50.0, this.height = 50.0, Key key})
+  SubjectAvatar(this.subject,
+      {this.width = 50.0, this.height = 50.0, this.fontSize = 10.0, Key key})
       : super(key: key);
 
   @override
@@ -68,6 +70,6 @@ class SubjectAvatar extends StatelessWidget {
                     style: Theme.of(context)
                         .textTheme
                         .button
-                        .copyWith(color: Colors.white, fontSize: 10)))));
+                        .copyWith(color: Colors.white, fontSize: fontSize)))));
   }
 }

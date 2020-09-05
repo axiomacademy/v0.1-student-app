@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../components/tutor_profile.dart';
 import '../components/text_fields.dart';
+import '../components/list_items.dart';
 
 class TutorPage extends StatefulWidget {
   TutorPage({Key key}) : super(key: key);
@@ -52,6 +53,41 @@ class _TutorPageState extends State<TutorPage> {
               child: TutorProfile(),
             )
           ])),
+      body: ListView(shrinkWrap: true, children: <Widget>[
+        Container(
+            padding: EdgeInsets.only(
+                left: 20.0, right: 10.0, top: 20.0, bottom: 5.0),
+            child: Text("Recent Sessions",
+                style: Theme.of(context).textTheme.headline6)),
+        SubjectListItem(
+            subject: "Physics",
+            date: "26 June 2020",
+            duration: "15 mins",
+            description:
+                "Went through the basics of circular motion and summarised concepts on pressure"),
+        SubjectListItem(
+            subject: "Mathematics",
+            date: "25 June 2020",
+            duration: "2 hours",
+            description:
+                "Discussing and summarizing pre-calculus, touching on limits"),
+        SubjectListItem(
+            subject: "Economics",
+            date: "20 June 2020",
+            duration: "1 hour",
+            description:
+                "Taught supply-demand curves, price inelasticity and other key concepts"),
+        SubjectListItem(
+            subject: "Chemistry",
+            date: "20 June 2020",
+            duration: "2 hours",
+            description: "Exam revision and prep-work"),
+        SubjectListItem(
+            subject: "Physics",
+            date: "14 June 2020",
+            duration: "2 hours",
+            description: "Went through specific gravity, bouyancy concepts"),
+      ]),
     ));
   }
 }
