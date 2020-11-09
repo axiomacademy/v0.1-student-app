@@ -2,7 +2,16 @@ import 'dart:async';
 import 'package:meta/meta.dart';
 
 /// Contains all the possible auth status
-enum AuthStatus { unknown, authenticated, unauthenticated }
+enum AuthStatus {
+  /// Authentication state not known yet
+  unknown,
+
+  /// User has been authenticated
+  authenticated,
+
+  /// User is not authenticated
+  unauthenticated
+}
 
 /// Contains all the GraphQL calls relating to authentication
 class AuthRepository {

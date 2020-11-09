@@ -1,0 +1,238 @@
+# GraphQL schema example
+#
+# https://gqlgen.com/getting-started/
+
+interface User {
+  id: ID!
+  username: String!
+  firstName: String!
+  lastName: String!
+  email: String!
+  profilePic: String!
+}
+
+scalar Time
+
+enum HeartbeatStatus {
+  AVAILABLE
+  UNAVAILABLE
+}
+
+enum SubjectName {
+  PHYSICS
+  ECONOMICS
+  MATHEMATICS
+  CHEMISTRY
+  BIOLOGY
+}
+
+enum SubjectStandard {
+  ALEVELS
+  OLEVELS
+  IB
+}
+
+type Subject {
+  name: SubjectName!
+  standard: SubjectStandard!
+}
+
+############################## TYPES #####################################################
+
+type Student implements User {
+  id: ID!
+  username: String!
+  firstName: String!
+  lastName: String!
+  email: String!
+  profilePic: String!
+}
+
+type Tutor implements User {
+  id: ID!
+  username: String!
+  firstName: String!
+  lastName: String!
+  email: String!
+  profilePic: String!
+  hourlyRate: Int!
+  bio: String!
+  rating: Int!
+  education: [String!]!
+  subjects: [Subject!]!
+}
+
+type Lesson {
+  id: ID!
+  subject: Subject!
+  summary: String!
+  tutor: Tutor!
+  student: Student!
+  scheduled: Boolean!
+  startTime: Time!
+  endTime: Time!
+}
+
+type MatchNotification {
+  student: Student!
+  subject: Subject!
+  token: String!
+}
+
+type Match {
+  id: ID!
+  status: String!
+  scheduled: Boolean!
+  tutor: Tutor
+  student: Student!
+  subject: Subject!
+  startTime: Time
+  endTime: Time
+}
+
+type Notification {
+  id: ID!
+  title: String!
+  subtitle: String!
+  image: String!
+  created: Time!
+}
+
+type Heartbeat {
+  status: HeartbeatStatus!
+  lastSeen: Int!
+}
+
+type Message {
+  to: String!
+  from: String!
+  timestamp: Time!
+  message: String!
+}
+
+#################################### INPUTS ################################################
+
+input NewSubject {
+  name: SubjectName!
+  standard: SubjectStandard!
+}
+
+input NewStudent {
+  username: String!
+  firstName: String!
+  lastName: String!
+  email: String!
+  password: String!
+  profilePic: String!
+}
+
+input NewTutor {
+  username: String!
+  firstName: String!
+  lastName: String!
+  email: String!
+  password: String!
+  profilePic: String!
+  hourlyRate: Int!
+  bio: String!
+  education: [String!]!
+  subjects: [NewSubject!]!
+}
+
+input LoginInfo {
+  username: String!
+  password: String!
+}
+
+input SendMessage {
+  to: String!
+  message: String!
+}
+
+input MessageRange {
+  to: String!
+  start: Time
+  end: Time
+}
+
+input UpdateNotification {
+  id: String!
+  read: Boolean!
+}
+
+input OnDemandMatchRequest {
+  subject: NewSubject!
+}
+
+input ScheduledMatchParameters {
+  subject: NewSubject!
+  time: TimeRangeRequest!
+}
+
+input ScheduledMatchRequest {
+  tutor: String!
+  subject: NewSubject!
+  time: TimeRangeRequest!
+}
+
+input TimeRangeRequest {
+  startTime: Time!
+  endTime: Time!
+}
+
+############################### QUERIES ####################################################
+
+type Query {
+  self: User!
+  messages(input: MessageRange!): [Message!]!
+  lessons(input: TimeRangeRequest!): [Lesson!]
+  pendingMatches: [Match!] 
+  notifications(input: TimeRangeRequest!): [Notification!]
+  
+  # Match Service
+  getScheduledMatches(input: ScheduledMatchParameters!): [Tutor!]!
+  checkForMatch(input: String!): Lesson
+  
+  # Video Service
+  getLessonRoom(input: String!): String!
+}
+
+############################### MUTATIONS ####################################################
+
+type Mutation {
+  createStudent(input: NewStudent!): String!
+  loginStudent(input: LoginInfo!): String!
+
+  createTutor(input: NewTutor!): String!
+  loginTutor(input: LoginInfo!): String!
+  refreshToken: String!
+
+  # Heartbeat Service
+  updateHeartbeat(input: HeartbeatStatus!): String!
+
+  # Chat Service
+  sendMessage(input: SendMessage!): String!
+  
+  # Video Service
+  createLessonRoom(input: String!): String!
+  endLessonRoom(input: String!): String!
+  
+  # Match Service
+  requestOnDemandMatch(input: OnDemandMatchRequest!): String!
+  requestScheduledMatch(input: ScheduledMatchRequest!): String!
+  acceptOnDemandMatch(input: String!): Lesson!
+  acceptScheduledMatch(input: String!): Lesson!
+
+  # Notification Service
+  updateNotification(input: UpdateNotification!): Notification!
+  registerPushNotification(input: String!): String!
+}
+
+############################### SUBSCRIPTIONS ####################################################
+type Subscription {
+  # Chat Service
+  subscribeMessages: Message!
+
+  # Match Service
+  subscribeMatchNotifications: MatchNotification!
+}
