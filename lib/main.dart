@@ -21,7 +21,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
         title: 'Axiom',
         theme: buildTheme(),
-        home: SubjectPage(),
+        home: RegisterPage(),
         routes: {
           "/welcome": (context) => WelcomePage(),
           "/login": (context) => LoginPage(),

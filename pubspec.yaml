@@ -23,13 +23,22 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+
+  # UI related
   smooth_page_indicator: ^0.1.5
   flutter_svg: ^0.18.0
   table_calendar: ^2.2.3
   flutter_spinkit: "^4.1.2"
   dash_chat: ^1.1.14
+  keyboard_avoider: ^0.1.2
+
+  # Logic related
+  bloc: ^6.0.0
+  flutter_bloc: ^6.0.0
+  equatable: ^1.2.3
 
 dev_dependencies:
+  effective_dart: ^1.2.0
   flutter_test:
     sdk: flutter
 
