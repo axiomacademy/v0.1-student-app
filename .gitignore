@@ -40,6 +40,7 @@ app.*.symbols
 app.*.map.json
 
 # Related to generated files, for Ferry GraphQL
+*.gql.dart
 *.gql.g.dart
 *.g.dart
 
