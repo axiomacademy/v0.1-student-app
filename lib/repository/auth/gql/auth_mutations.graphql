@@ -1,3 +1,3 @@
-mutation LoginTutor($input: LoginInfo!) {
-  loginTutor(input: $input)
+mutation LoginStudent($input: LoginInfo!) {
+  loginStudent(input: $input)
 }

@@ -1,0 +1,10 @@
+query SelfUser {
+  self {
+    ... on Student {
+      username,
+      firstName,
+      lastName
+    }
+  }
+}
+
