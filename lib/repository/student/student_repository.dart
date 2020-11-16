@@ -1,7 +1,10 @@
 import 'dart:async';
 import 'package:ferry/ferry.dart';
 
-import "gql/student_queries.req.gql.dart";
+import 'gql/student_queries.data.gql.dart';
+import 'gql/student_queries.req.gql.dart';
+import 'gql/student_queries.var.gql.dart';
+
 import '../../models/student.dart';
 import '../ferry_client.dart';
 
@@ -29,9 +32,16 @@ class StudentRepository {
         throw (res.graphqlErrors.single.message);
       }
 
-      print(res.data?.self);
+      // Default to returning an empty map so that key lookups don't fail
+      final rawStudent = res.data?.self?.toJson() ?? const {};
+
       return Student(
-          "1", "Sudharshan", "SHan", "Sundar", "sudhar393", "picture");
+          rawStudent["id"],
+          rawStudent["username"],
+          rawStudent["firstName"],
+          rawStudent["lastName"],
+          rawStudent["email"],
+          rawStudent["profilePic"]);
     }
 
     throw ("Error retrieving self: Stream returned nothing");

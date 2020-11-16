@@ -31,6 +31,7 @@ class AxiomApp extends StatelessWidget {
     authRepo.logIn(username: "shruthika", password: "password");
 
     Future.delayed(const Duration(milliseconds: 5000), studentRepo.getSelf)
+        .then((s) => print(s.userName))
         .catchError(print);
 
     return MaterialApp(

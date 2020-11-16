@@ -1,9 +1,12 @@
 query SelfUser {
   self {
     ... on Student {
+      id,
       username,
       firstName,
-      lastName
+      lastName,
+      email,
+      profilePic
     }
   }
 }
