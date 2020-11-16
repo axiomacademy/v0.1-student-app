@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:ferry/ferry.dart';
 
 import "gql/student_queries.req.gql.dart";
 import '../../models/student.dart';
@@ -13,16 +14,26 @@ class StudentRepository {
 
   /// Gets the current logged in user
   Future<Student> getSelf() async {
-    final selfReq = GSelfUserReq((b) => b);
+    // Self query takes no parameters
+    final selfReq =
+        GSelfUserReq((b) => b..fetchPolicy = FetchPolicy.CacheAndNetwork);
 
-    final response = await _fclient.getAuthClient().request(selfReq).single;
-    if (response.hasErrors) {
-      throw ('Unable to fetch self student');
+    // Retreive auth client and create request (check if the auth client exists)
+    final authClient = _fclient.getAuthClient();
+    if (authClient == null) {
+      throw ("Error retrieving self: Not authorised");
     }
 
-    return Future.delayed(
-      const Duration(milliseconds: 300),
-      () => Student("ha", "sudharshan", "shan", "pew", "292", "somewhere.com"),
-    );
+    await for (final res in authClient.request(selfReq)) {
+      if (res.hasErrors) {
+        throw (res.graphqlErrors.single.message);
+      }
+
+      print(res.data?.self);
+      return Student(
+          "1", "Sudharshan", "SHan", "Sundar", "sudhar393", "picture");
+    }
+
+    throw ("Error retrieving self: Stream returned nothing");
   }
 }

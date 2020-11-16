@@ -1,7 +1,8 @@
 import 'dart:async';
 import 'package:meta/meta.dart';
-import '../ferry_client.dart';
+import 'package:ferry/ferry.dart';
 
+import '../ferry_client.dart';
 import 'gql/auth_mutations.req.gql.dart';
 
 /// Contains all the possible auth status
@@ -32,27 +33,30 @@ class AuthRepository {
   }
 
   /// Calls LoginStudent graphql endpoint (also sets up token refresh)
-  Future<void> logIn({
+  void logIn({
     @required String username,
     @required String password,
   }) async {
     final loginStudentReq = GLoginStudentReq(
       (b) => b
+        ..fetchPolicy = FetchPolicy.NoCache
         ..vars.input.username = username
         ..vars.input.password = password,
     );
 
-    var response =
-        await _fclient.getUnauthClient().request(loginStudentReq).single;
-    if (response.hasErrors) {
-      _controller.add(AuthStatus.unauthenticated);
-      return;
-    }
-
-    // Retrieve the jwt from the response & init auth
-    var jwt = response.data.loginStudent;
-    _fclient.initializeAuth(jwt);
-    _controller.add(AuthStatus.authenticated);
+    // Retrieve unauth client and create request
+    _fclient.getUnauthClient().request(loginStudentReq).listen((res) {
+      if (res.hasErrors) {
+        print(res.graphqlErrors.single.message);
+        _fclient.resetAuth();
+        _controller.add(AuthStatus.unauthenticated);
+      } else {
+        final jwt = res.data?.loginStudent;
+        print("JWT obtained: $jwt");
+        _fclient.initializeAuth(jwt);
+        _controller.add(AuthStatus.authenticated);
+      }
+    });
   }
 
   /// Deletes local JWT string

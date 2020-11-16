@@ -276,7 +276,7 @@ class _ScheduleViewState extends State<ScheduleView>
           ];
         },
       ),
-      onDaySelected: (date, events) {
+      onDaySelected: (date, events, _) {
         _onDaySelected(date, events);
         _animationController.forward(from: 0.0);
       },

@@ -27,7 +27,8 @@ class FerryClient {
     _authClient = null;
   }
 
-  /// Get the unauthenticated client
+  /// Get the unauthenticated client,
+  /// remember to check for a null if it is not authenticated
   Client getUnauthClient() => _client;
 
   /// Get the authenticated gql client
