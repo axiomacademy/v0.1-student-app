@@ -5,8 +5,15 @@ import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 import '../components/buttons.dart';
 
+/// WelcomePage, redirect to this for unauthneticated user
 class WelcomePage extends StatefulWidget {
+  /// Default WelcomePage constructor
   WelcomePage({Key key}) : super(key: key);
+
+  /// Convenience method to route to WelcomePage
+  static Route route() {
+    return MaterialPageRoute<void>(builder: (_) => WelcomePage());
+  }
 
   @override
   _WelcomePageState createState() => _WelcomePageState();

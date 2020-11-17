@@ -1,25 +1,29 @@
 part of 'auth_bloc.dart';
 
+/// AuthState represents the internal bloc state
 class AuthState extends Equatable {
+  /// Contains the authentication status
+  final AuthStatus status;
+
+  /// Contains the instance of the currently logged in student
+  final Student student;
+
   const AuthState._({
     this.status = AuthStatus.unknown,
-    this.user,
+    this.student,
   });
 
   /// Unknown State
   const AuthState.unknown() : this._();
 
   /// Authenticated State
-  const AuthState.authenticated(User user)
-      : this._(status: AuthStatus.authenticated, user: user);
+  const AuthState.authenticated(Student student)
+      : this._(status: AuthStatus.authenticated, student: student);
 
   /// Unauthenticated State
   const AuthState.unauthenticated()
       : this._(status: AuthStatus.unauthenticated);
 
-  final AuthStatus status;
-  final User user;
-
   @override
-  List<Object> get props => [status, user];
+  List<Object> get props => [status, student];
 }

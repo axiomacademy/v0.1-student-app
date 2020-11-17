@@ -1,11 +1,18 @@
 import 'package:flutter/material.dart';
 
+import "../booking_bottom_sheet/main.dart";
 import 'home_view.dart';
 import 'schedule_view.dart';
-import "../booking_bottom_sheet/main.dart";
 
+/// Main Page
 class MainPage extends StatefulWidget {
+  /// Default main page constructor
   MainPage({Key key}) : super(key: key);
+
+  /// Convenience method to route to WelcomePage
+  static Route route() {
+    return MaterialPageRoute<void>(builder: (_) => MainPage());
+  }
 
   @override
   _MainPageState createState() => _MainPageState();
@@ -33,7 +40,7 @@ class _MainPageState extends State<MainPage> {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(15.0),
                 ),
-                builder: (BuildContext context) {
+                builder: (context) {
                   return BookingBottomSheet();
                 });
           },
@@ -49,19 +56,19 @@ class _MainPageState extends State<MainPage> {
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
-            title: Text('Home'),
+            label: "Home",
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.access_time),
-            title: Text('Scheduled'),
+            label: "Scheduled",
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.note),
-            title: Text('Notes'),
+            label: "Notes",
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.notifications),
-            title: Text('Notifications'),
+            label: "Notifications",
           ),
         ],
         currentIndex: _currentIndex,

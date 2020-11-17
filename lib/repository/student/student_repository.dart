@@ -1,12 +1,9 @@
 import 'dart:async';
 import 'package:ferry/ferry.dart';
 
-import 'gql/student_queries.data.gql.dart';
-import 'gql/student_queries.req.gql.dart';
-import 'gql/student_queries.var.gql.dart';
-
-import '../../models/student.dart';
 import '../ferry_client.dart';
+import '../../models/student.dart';
+import 'gql/student_queries.req.gql.dart';
 
 /// Repository containing all the GQL queries/mutations for the Student
 class StudentRepository {
