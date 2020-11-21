@@ -5,21 +5,25 @@ import 'package:flutter_svg/flutter_svg.dart';
 import '../components/buttons.dart';
 import '../components/text_fields.dart';
 
-// Main page for registration for new students
 class RegisterPage extends StatefulWidget {
-  RegisterPage({Key key}) : super(key: key);
+  /// Convenience method to route to WelcomePage
+  static Route route() {
+    return MaterialPageRoute<void>(builder: (_) => RegisterPage());
+  }
 
   @override
-  _RegisterPageState createState() => _RegisterPageState();
+  _RegisterPageState createState() {
+    return _RegisterPageState();
+  }
 }
 
+/// Main page for registration for new students
 class _RegisterPageState extends State<RegisterPage> {
-  final _formKey = GlobalKey<FormState>();
-  final ScrollController _scrollController = ScrollController();
+  final _registerScrollController = ScrollController();
 
   @override
   Widget build(BuildContext context) {
-    double width = MediaQuery.of(context).size.width;
+    final width = MediaQuery.of(context).size.width;
 
     return Material(
         child: Stack(children: <Widget>[
@@ -51,112 +55,134 @@ class _RegisterPageState extends State<RegisterPage> {
       Align(
           alignment: Alignment.bottomCenter,
           child: SafeArea(
-              child: Container(
-                  margin: EdgeInsets.all(20.0),
-                  child: Material(
-                      type: MaterialType.card,
-                      borderRadius: BorderRadius.all(Radius.circular(10)),
-                      elevation: 3,
+              child: KeyboardAvoider(
+                  child: SingleChildScrollView(
+                      controller: _registerScrollController,
                       child: Container(
-                          padding: EdgeInsets.only(
-                              top: 0, bottom: 0, left: 25.0, right: 25.0),
-                          child: Form(
-                              key: _formKey,
-                              child: KeyboardAvoider(
-                                  autoScroll: true,
-                                  child: ListView(
-                                      shrinkWrap: true,
-                                      controller: _scrollController,
-                                      padding: EdgeInsets.only(
-                                          top: 30.0, bottom: 20.0),
-                                      children: <Widget>[
-                                        BorderTextFormField(
-                                            labelText: 'Username',
-                                            validator: (value) {
-                                              if (value.isEmpty) {
-                                                return 'Please enter some text';
-                                              }
-                                              return null;
-                                            }),
-                                        Padding(
-                                            padding: EdgeInsets.only(top: 20.0),
-                                            child: BorderTextFormField(
-                                              labelText: 'First Name',
-                                              validator: (value) {
-                                                if (value.isEmpty) {
-                                                  return 'Please enter some text';
-                                                }
-                                                return null;
-                                              },
-                                            )),
-                                        Padding(
-                                            padding: EdgeInsets.only(top: 10.0),
-                                            child: BorderTextFormField(
-                                              labelText: 'Last Name',
-                                              validator: (value) {
-                                                if (value.isEmpty) {
-                                                  return 'Please enter some text';
-                                                }
-                                                return null;
-                                              },
-                                            )),
-                                        Padding(
-                                            padding: EdgeInsets.only(top: 10.0),
-                                            child: BorderTextFormField(
-                                              labelText: 'Email',
-                                              validator: (value) {
-                                                if (value.isEmpty) {
-                                                  return 'Please enter some text';
-                                                }
-                                                return null;
-                                              },
-                                            )),
-                                        Padding(
-                                            padding: EdgeInsets.only(top: 20.0),
-                                            child: BorderTextFormField(
-                                              labelText: 'Password',
-                                              suffixIcon:
-                                                  Icon(Icons.visibility_off),
-                                              validator: (value) {
-                                                if (value.isEmpty) {
-                                                  return 'Please enter some text';
-                                                }
-                                                return null;
-                                              },
-                                            )),
-                                        Padding(
-                                            padding: EdgeInsets.only(top: 10.0),
-                                            child: BorderTextFormField(
-                                              labelText: 'Confirm Password',
-                                              suffixIcon:
-                                                  Icon(Icons.visibility_off),
-                                              validator: (value) {
-                                                if (value.isEmpty) {
-                                                  return 'Please enter some text';
-                                                }
-                                                return null;
-                                              },
-                                            )),
-                                        Padding(
-                                            padding: EdgeInsets.only(
-                                              top: 40.0,
-                                            ),
-                                            child: Row(children: <Widget>[
-                                              TextFlatButton(
-                                                  onPressed: () {
-                                                    Navigator.pop(context);
-                                                  },
-                                                  text: "BACK"),
-                                              Spacer(),
-                                              Container(
-                                                  width: 140.0,
-                                                  child: IconRaisedButton(
-                                                      onPressed: () {},
-                                                      text: "CONTINUE",
-                                                      icon:
-                                                          Icons.navigate_next)),
-                                            ]))
-                                      ])))))))),
+                          margin: EdgeInsets.all(20.0),
+                          child: Material(
+                              type: MaterialType.card,
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(10)),
+                              elevation: 3,
+                              child: Container(
+                                  padding: EdgeInsets.only(
+                                      top: 30,
+                                      bottom: 20,
+                                      left: 25.0,
+                                      right: 25.0),
+                                  child: _RegisterForm())))))))
     ]));
+  }
+}
+
+/// Register Form widget
+class _RegisterForm extends StatefulWidget {
+  @override
+  _RegisterFormState createState() {
+    return _RegisterFormState();
+  }
+}
+
+class _RegisterFormState extends State<_RegisterForm> {
+  final _registerFormKey = GlobalKey<FormState>();
+
+  @override
+  Widget build(BuildContext context) {
+    return Form(
+        key: _registerFormKey,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            BorderTextFormField(
+                labelText: 'Username',
+                validator: (value) {
+                  if (value.isEmpty) {
+                    return 'Please enter some text';
+                  }
+                  return null;
+                }),
+            Padding(
+                padding: EdgeInsets.only(top: 20.0),
+                child: BorderTextFormField(
+                  labelText: 'First Name',
+                  validator: (value) {
+                    if (value.isEmpty) {
+                      return 'Please enter some text';
+                    }
+                    return null;
+                  },
+                )),
+            Padding(
+                padding: EdgeInsets.only(top: 10.0),
+                child: BorderTextFormField(
+                  labelText: 'Last Name',
+                  validator: (value) {
+                    if (value.isEmpty) {
+                      return 'Please enter some text';
+                    }
+                    return null;
+                  },
+                )),
+            Padding(
+                padding: EdgeInsets.only(top: 10.0),
+                child: BorderTextFormField(
+                  labelText: 'Email',
+                  validator: (value) {
+                    if (value.isEmpty) {
+                      return 'Please enter some text';
+                    }
+                    return null;
+                  },
+                )),
+            Padding(
+                padding: EdgeInsets.only(top: 20.0),
+                child: BorderTextFormField(
+                  labelText: 'Password',
+                  suffixIcon: Icon(Icons.visibility_off),
+                  validator: (value) {
+                    if (value.isEmpty) {
+                      return 'Please enter some text';
+                    }
+                    return null;
+                  },
+                )),
+            Padding(
+                padding: EdgeInsets.only(top: 10.0),
+                child: BorderTextFormField(
+                  labelText: 'Confirm Password',
+                  suffixIcon: Icon(Icons.visibility_off),
+                  validator: (value) {
+                    if (value.isEmpty) {
+                      return 'Please enter some text';
+                    }
+                    return null;
+                  },
+                )),
+            Padding(
+                padding: EdgeInsets.only(
+                  top: 40.0,
+                ),
+                child: Row(children: <Widget>[
+                  TextFlatButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      text: "BACK"),
+                  Spacer(),
+                  Container(
+                      width: 140.0,
+                      child: IconRaisedButton(
+                          onPressed: () {
+                            if (_registerFormKey.currentState.validate()) {
+                              Scaffold.of(context).showSnackBar(
+                                  SnackBar(content: Text('Processing Data')));
+                            }
+                          },
+                          text: "CONTINUE",
+                          icon: Icons.navigate_next)),
+                ])),
+          ],
+        ));
   }
 }

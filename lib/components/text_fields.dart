@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 
+/// TextField with a border style
 class BorderTextFormField extends StatelessWidget {
   final String labelText;
   final Icon suffixIcon;
   final Icon prefixIcon;
+  final bool hidden;
   final String Function(String) validator;
 
   BorderTextFormField(
@@ -11,12 +13,14 @@ class BorderTextFormField extends StatelessWidget {
       @required this.validator,
       this.suffixIcon,
       this.prefixIcon,
+      this.hidden = false,
       Key key})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      obscureText: hidden,
       decoration: InputDecoration(
         isDense: true,
         contentPadding: EdgeInsets.all(15),
@@ -30,6 +34,7 @@ class BorderTextFormField extends StatelessWidget {
   }
 }
 
+/// TextField with a filled style
 class FilledTextFormField extends StatelessWidget {
   final String labelText;
   final Icon suffixIcon;

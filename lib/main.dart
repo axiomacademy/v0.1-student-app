@@ -3,12 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'bloc/auth/auth_bloc.dart';
 
-import 'pages/chat.dart';
-import 'pages/login.dart';
 import 'pages/main/main.dart';
-import 'pages/register.dart';
-import 'pages/subject.dart';
-import 'pages/tutor.dart';
 import 'pages/welcome.dart';
 
 import 'repository/auth/auth_repository.dart';
@@ -45,30 +40,6 @@ class AxiomApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    /* Testing repository
-    final fclient = FerryClient("http://localhost:8080/query");
-    final authRepo = AuthRepository(fclient);
-    final studentRepo = StudentRepository(fclient);
-
-    authRepo.logIn(username: "shruthika", password: "password");
-
-    Future.delayed(const Duration(milliseconds: 5000), studentRepo.getSelf)
-        .then((s) => print(s.userName))
-        .catchError(print);
-
-    return MaterialApp(
-        title: 'Axiom',
-        theme: buildTheme(),
-        home: MainPage(),
-        routes: {
-          "/welcome": (context) => WelcomePage(),
-          "/login": (context) => LoginPage(),
-          "/register": (context) => RegisterPage(),
-          "/chat": (context) => ChatPage(),
-          "/tutor": (context) => TutorPage(),
-          "/subject": (context) => SubjectPage(),
-        }); */
-
     return RepositoryProvider.value(
       value: authRepository,
       child: BlocProvider(

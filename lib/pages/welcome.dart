@@ -4,6 +4,8 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 import '../components/buttons.dart';
+import '../pages/register.dart';
+import '../pages/login.dart';
 
 /// WelcomePage, redirect to this for unauthneticated user
 class WelcomePage extends StatefulWidget {
@@ -103,13 +105,13 @@ class _WelcomePageState extends State<WelcomePage> {
                                 ]))),
                         IconRaisedButton(
                             onPressed: () {
-                              Navigator.pushNamed(context, '/login');
+                              Navigator.of(context).push(LoginPage.route());
                             },
                             text: "LOGIN WITH EMAIL",
                             icon: Icons.mail),
                         OutlineButton(
                             onPressed: () {
-                              Navigator.pushNamed(context, '/register');
+                              Navigator.of(context).push(RegisterPage.route());
                             },
                             shape: RoundedRectangleBorder(
                                 borderRadius:
@@ -134,9 +136,12 @@ class _WelcomePageState extends State<WelcomePage> {
   }
 }
 
+/// InformationPage shows the sliding displays
 class InformationPage extends StatelessWidget {
+  /// imagePath: path to svg, titleText: the big title, subtitleText: smol text
   final String imagePath, titleText, subtitleText;
 
+  /// Default constructor for the Information page
   InformationPage(this.imagePath, this.titleText, this.subtitleText, {Key key})
       : super(key: key);
 
