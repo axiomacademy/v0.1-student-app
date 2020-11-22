@@ -6,6 +6,7 @@ import '../../models/student.dart';
 
 import '../../repository/auth/auth_repository.dart';
 import '../../repository/student/student_repository.dart';
+import '../../repository/exceptions.dart';
 
 part 'auth_event.dart';
 part 'auth_state.dart';
@@ -40,8 +41,15 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         return const AuthState.unauthenticated();
       case AuthStatus.authenticated:
         // Retrive the student
-        final student = await _studentRepository.getSelf();
-        return AuthState.authenticated(student);
+        try {
+          final student = await _studentRepository.getSelf();
+          return AuthState.authenticated(student);
+        } on GQLServerException catch (e) {
+          print(e.errorMessage);
+          return const AuthState.unauthenticated();
+        }
+
+        return const AuthState.unauthenticated();
       default:
         return const AuthState.unknown();
     }

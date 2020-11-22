@@ -16,7 +16,9 @@ void main() {
   // Start the ferry client
   final fclient = FerryClient("http://localhost:8080/query");
   final authRepository = AuthRepository(fclient);
-  final studentRepository = StudentRepository(fclient);
+
+  // Anything that handles authentication needs a reference to auth repository
+  final studentRepository = StudentRepository(fclient, authRepository);
 
   runApp(AxiomApp(
       authRepository: authRepository, studentRepository: studentRepository));

@@ -7,6 +7,7 @@ class BorderTextFormField extends StatelessWidget {
   final Icon prefixIcon;
   final bool hidden;
   final String Function(String) validator;
+  final TextEditingController controller;
 
   BorderTextFormField(
       {@required this.labelText,
@@ -14,12 +15,14 @@ class BorderTextFormField extends StatelessWidget {
       this.suffixIcon,
       this.prefixIcon,
       this.hidden = false,
+      this.controller,
       Key key})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      controller: controller,
       obscureText: hidden,
       decoration: InputDecoration(
         isDense: true,
@@ -42,12 +45,14 @@ class FilledTextFormField extends StatelessWidget {
   final String Function(String) validator;
   final Color fillColor;
   final Color textColor;
+  final TextEditingController controller;
 
   FilledTextFormField(
       {@required this.labelText,
       @required this.validator,
       this.suffixIcon,
       this.prefixIcon,
+      this.controller,
       this.fillColor = const Color(0x14000000),
       this.textColor = const Color(0xB0000000),
       Key key})
@@ -56,6 +61,7 @@ class FilledTextFormField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      controller: controller,
       decoration: InputDecoration(
         isDense: true,
         filled: true,

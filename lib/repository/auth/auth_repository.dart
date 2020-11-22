@@ -2,8 +2,9 @@ import 'dart:async';
 import 'package:meta/meta.dart';
 import 'package:ferry/ferry.dart';
 
+import '../exceptions.dart';
 import '../ferry_client.dart';
-import 'gql/auth_mutations.req.gql.dart';
+import 'gql/auth_requests.req.gql.dart';
 
 /// Contains all the possible auth status
 enum AuthStatus {
@@ -44,25 +45,36 @@ class AuthRepository {
         ..vars.input.password = password,
     );
 
-    // Retrieve unauth client and create request
-    _fclient.getUnauthClient().request(loginStudentReq).listen((res) {
+    final unauthClient = _fclient.getUnauthClient();
+    await for (final res in unauthClient.request(loginStudentReq)) {
       if (res.hasErrors) {
-        print(res.graphqlErrors.single.message);
         _fclient.resetAuth();
         _controller.add(AuthStatus.unauthenticated);
+        throw GQLServerException(res.graphqlErrors.single.message);
       } else {
         final jwt = res.data?.loginStudent;
-        print("JWT obtained: $jwt");
+
+        if (jwt == null) {
+          throw EmptyResponseException();
+        }
+
         _fclient.initializeAuth(jwt);
         _controller.add(AuthStatus.authenticated);
+        return;
       }
-    });
+    }
   }
 
   /// Deletes local JWT string
   void logOut() {
     _fclient.resetAuth();
     _controller.add(AuthStatus.unauthenticated);
+  }
+
+  /// SHortcut to login with an existing jwt
+  void logInManual(String jwt) {
+    _fclient.initializeAuth(jwt);
+    _controller.add(AuthStatus.authenticated);
   }
 
   /// Automatically disposes StreamController
