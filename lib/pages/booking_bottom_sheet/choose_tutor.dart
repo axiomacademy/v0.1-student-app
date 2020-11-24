@@ -40,7 +40,7 @@ class _ChooseTutorState extends State<ChooseTutor> {
                               style:
                                   Theme.of(context).primaryTextTheme.headline5),
                           Spacer(),
-                          TextFlatButton(text: "Cancel", onPressed: () {}),
+                          StandardFlatButton(text: "Cancel", onPressed: () {}),
                         ])),
                     Padding(
                         padding: EdgeInsets.only(

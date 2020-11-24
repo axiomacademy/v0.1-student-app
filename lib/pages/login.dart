@@ -87,10 +87,9 @@ class _LoginPageState extends State<LoginPage> {
                                           child: BlocProvider(
                                               create: (context) {
                                                 return LoginBloc(
-                                                    authRepository:
-                                                        RepositoryProvider.of<
-                                                                AuthRepository>(
-                                                            context));
+                                                    RepositoryProvider.of<
+                                                            AuthRepository>(
+                                                        context));
                                               },
                                               child: _LoginForm()))))))))),
         ]));
@@ -122,55 +121,53 @@ class _LoginFormState extends State<_LoginForm> {
           );
       }
     }, child: BlocBuilder<LoginBloc, LoginState>(builder: (context, state) {
-      if (state.status == LoginStatus.submitting) {
-        return Container();
-      } else {
-        return Form(
-            key: _loginFormKey,
-            child: Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
-              BorderTextFormField(
-                  controller: _usernameController,
-                  labelText: 'Username',
+      return Form(
+          key: _loginFormKey,
+          child: Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
+            BorderTextFormField(
+                controller: _usernameController,
+                labelText: 'Username',
+                validator: (value) {
+                  if (value.isEmpty) {
+                    return 'Please enter some text';
+                  }
+                  return null;
+                }),
+            Padding(
+                padding: EdgeInsets.only(top: 10.0),
+                child: BorderTextFormField(
+                  controller: _passwordController,
+                  labelText: 'Password',
+                  hidden: true,
+                  suffixIcon: Icon(Icons.visibility_off),
                   validator: (value) {
                     if (value.isEmpty) {
                       return 'Please enter some text';
                     }
                     return null;
-                  }),
-              Padding(
-                  padding: EdgeInsets.only(top: 10.0),
-                  child: BorderTextFormField(
-                    controller: _passwordController,
-                    labelText: 'Password',
-                    hidden: true,
-                    suffixIcon: Icon(Icons.visibility_off),
-                    validator: (value) {
-                      if (value.isEmpty) {
-                        return 'Please enter some text';
-                      }
-                      return null;
-                    },
-                  )),
-              Padding(
-                  padding: EdgeInsets.only(
-                    top: 40.0,
-                  ),
-                  child: Row(children: <Widget>[
-                    TextFlatButton(
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                        text: "BACK"),
-                    Spacer(),
-                    Container(
-                        width: 140.0,
-                        child: IconRaisedButton(
-                            onPressed: () => submitForm(context),
-                            text: "CONTINUE",
-                            icon: Icons.navigate_next)),
-                  ])),
-            ]));
-      }
+                  },
+                )),
+            Padding(
+                padding: EdgeInsets.only(
+                  top: 40.0,
+                ),
+                child: Row(children: <Widget>[
+                  StandardFlatButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      text: "BACK"),
+                  Spacer(),
+                  Container(
+                      width: 140.0,
+                      child: StandardRaisedButton(
+                          loading: (state.status == LoginStatus.submitting ||
+                              state.status == LoginStatus.successful),
+                          onPressed: () => submitForm(context),
+                          text: "CONTINUE",
+                          icon: Icons.navigate_next)),
+                ])),
+          ]));
     }));
   }
 

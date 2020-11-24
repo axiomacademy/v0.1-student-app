@@ -43,7 +43,7 @@ class _ChooseSubjectState extends State<ChooseSubject> {
                     Text("Choose a subject",
                         style: Theme.of(context).primaryTextTheme.headline5),
                     Spacer(),
-                    TextFlatButton(text: "Cancel", onPressed: () {}),
+                    StandardFlatButton(text: "Cancel", onPressed: () {}),
                   ])),
               Padding(
                   padding:
@@ -75,7 +75,7 @@ class _ChooseSubjectState extends State<ChooseSubject> {
                   }),
               Padding(
                   padding: EdgeInsets.only(top: 20.0, left: 20.0, right: 20.0),
-                  child: TextRaisedButton(
+                  child: StandardRaisedButton(
                       text: "Next",
                       onPressed: () {
                         widget.onChoose(subjects[selectedSubject]);

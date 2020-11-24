@@ -14,7 +14,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   final AuthRepository _authRepository;
 
   /// Default login bloc constructor
-  LoginBloc({@required AuthRepository authRepository})
+  LoginBloc(AuthRepository authRepository)
       : _authRepository = authRepository,
         super(const LoginState.unknown());
 
@@ -26,7 +26,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         await _authRepository.logIn(
             username: event.username, password: event.password);
         yield LoginState.successful();
-      } on RequestException catch (e) {
+      } on GQLServerException catch (e) {
         print(e.errorMessage);
         yield LoginState.failed(e.errorMessage);
       }

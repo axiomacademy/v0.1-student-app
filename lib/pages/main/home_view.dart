@@ -161,7 +161,7 @@ class _UpcomingListItem extends StatelessWidget {
                           alignment: Alignment.bottomRight,
                           child: Row(children: <Widget>[
                             Spacer(),
-                            TextIconFlatButton(
+                            StandardFlatButton(
                                 onPressed: () {}, text: "Join", icon: Icons.add)
                           ])))
                   : Container(),

@@ -39,7 +39,7 @@ class _MatchingState extends State<Matching> {
                   padding: EdgeInsets.only(left: 20.0, right: 10.0, top: 10.0),
                   child: Row(children: <Widget>[
                     Spacer(),
-                    TextFlatButton(text: "Cancel", onPressed: () {}),
+                    StandardFlatButton(text: "Cancel", onPressed: () {}),
                   ])),
               Container(
                   height: 200.0,

@@ -27,7 +27,7 @@ class StudentRepository {
       ..vars.input.lastName = lastName
       ..vars.input.email = email
       ..vars.input.password = password
-      ..vars.input.profilePic = profilePic);
+      ..vars.input.profilePic = profilePic ?? "");
 
     final unauthClient = _fclient.getUnauthClient();
 

@@ -103,7 +103,7 @@ class _WelcomePageState extends State<WelcomePage> {
                                           Theme.of(context).textTheme.button),
                                   Spacer()
                                 ]))),
-                        IconRaisedButton(
+                        StandardRaisedButton(
                             onPressed: () {
                               Navigator.of(context).push(LoginPage.route());
                             },

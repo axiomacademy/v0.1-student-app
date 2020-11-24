@@ -27,7 +27,7 @@ class ChooseSessionType extends StatelessWidget {
                     Text("Book a session",
                         style: Theme.of(context).primaryTextTheme.headline5),
                     Spacer(),
-                    TextFlatButton(text: "Cancel", onPressed: () {}),
+                    StandardFlatButton(text: "Cancel", onPressed: () {}),
                   ])),
               ListView(shrinkWrap: true, children: <Widget>[
                 _BookingOptionsTile(

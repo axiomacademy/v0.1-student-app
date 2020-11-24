@@ -46,7 +46,7 @@ class _ChooseSubjectLevelState extends State<ChooseSubjectLevel> {
                     Text("Choose a subject level",
                         style: Theme.of(context).primaryTextTheme.headline5),
                     Spacer(),
-                    TextFlatButton(text: "Cancel", onPressed: () {}),
+                    StandardFlatButton(text: "Cancel", onPressed: () {}),
                   ])),
               Padding(
                   padding:
@@ -78,7 +78,7 @@ class _ChooseSubjectLevelState extends State<ChooseSubjectLevel> {
                   }),
               Padding(
                   padding: EdgeInsets.only(top: 20.0, left: 20.0, right: 20.0),
-                  child: TextRaisedButton(
+                  child: StandardRaisedButton(
                       text: "Next",
                       onPressed: () {
                         widget.onChoose(subjectLevels[selectedSubjectLevel]);

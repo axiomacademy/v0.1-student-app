@@ -34,7 +34,7 @@ class _SuccessState extends State<Success> {
                     Text(title,
                         style: Theme.of(context).primaryTextTheme.headline5),
                     Spacer(),
-                    TextFlatButton(text: "Cancel", onPressed: () {}),
+                    StandardFlatButton(text: "Cancel", onPressed: () {}),
                   ])),
               Padding(
                   padding:
@@ -49,7 +49,7 @@ class _SuccessState extends State<Success> {
                   child: TutorProfile()),
               Padding(
                   padding: EdgeInsets.only(top: 20.0, left: 20.0, right: 20.0),
-                  child: TextRaisedButton(
+                  child: StandardRaisedButton(
                       text: "Start (10s)",
                       onPressed: () {
                         Navigator.of(context).pushNamed("book/match");

@@ -42,8 +42,11 @@ class AxiomApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return RepositoryProvider.value(
-      value: authRepository,
+    return MultiRepositoryProvider(
+      providers: [
+        RepositoryProvider.value(value: authRepository),
+        RepositoryProvider.value(value: studentRepository)
+      ],
       child: BlocProvider(
           create: (_) => AuthBloc(
               authRepository: authRepository,
