@@ -1,12 +1,13 @@
 import 'dart:async';
+
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
-import '../../models/student.dart';
 
+import '../../models/student.dart';
 import '../../repository/auth/auth_repository.dart';
-import '../../repository/student/student_repository.dart';
 import '../../repository/exceptions.dart';
+import '../../repository/student/student_repository.dart';
 
 part 'auth_event.dart';
 part 'auth_state.dart';

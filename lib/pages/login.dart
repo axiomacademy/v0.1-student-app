@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:keyboard_avoider/keyboard_avoider.dart';
 
-import 'package:flutter_svg/flutter_svg.dart';
-
+import '../bloc/login/login_bloc.dart';
 import '../components/buttons.dart';
 import '../components/text_fields.dart';
-
-import '../bloc/login/login_bloc.dart';
 import '../repository/auth/auth_repository.dart';
 
 /// Login Page widget

@@ -14,22 +14,27 @@ class LessonRepository {
   final _lessonStreamController = StreamController<List<LessonPreview>>();
   final FerryClient _fclient;
 
+  StreamSubscription _lessonSubscription;
+
+  /// The time period for which lessons have been loaded
+  DateTime loadedTimeStart, loadedTimeEnd;
+
   /// Default Constructor, takes in a ferry client instance
-  LessonRepository(FerryClient client, DateTime startTime, DateTime endTime)
+  LessonRepository(FerryClient client, this.loadedTimeStart, this.loadedTimeEnd)
       : _fclient = client {
     // Build the upcoming lessons request
     _lessonReq = GGetLessonPreviewReq((b) => b
       ..requestId = 'LessonReq'
       ..fetchPolicy = FetchPolicy.NoCache
-      ..vars.input.startTime = startTime
-      ..vars.input.endTime = endTime);
+      ..vars.input.startTime = loadedTimeStart
+      ..vars.input.endTime = loadedTimeEnd);
 
     final authClient = _fclient.getAuthClient();
     if (authClient == null) {
       throw UnauthenticatedException;
     }
 
-    authClient.request(_lessonReq).listen((res) {
+    _lessonSubscription = authClient.request(_lessonReq).listen((res) {
       if (res.hasErrors) {
         throw GQLServerException(res.graphqlErrors.single.message);
       }
@@ -57,6 +62,7 @@ class LessonRepository {
 
   /// Initialized to an empty list before any request is made
   Stream<List<LessonPreview>> get lessons async* {
+    Future.delayed(Duration(seconds: 1), refreshLessons);
     yield* _lessonStreamController.stream;
   }
 
@@ -78,7 +84,7 @@ class LessonRepository {
     }
 
     // Rebuild request
-    final newLessonReq = _lessonReq.rebuild(
+    _lessonReq = _lessonReq.rebuild(
       (b) => b
         ..vars.input.startTime = startTime
         ..vars.input.endTime = endTime
@@ -87,9 +93,12 @@ class LessonRepository {
             result,
     );
 
-    authClient.requestController.add(newLessonReq);
+    authClient.requestController.add(_lessonReq);
   }
 
   /// Automatically disposes StreamController
-  void dispose() => _lessonStreamController.close();
+  void dispose() {
+    _lessonStreamController.close();
+    _lessonSubscription.cancel();
+  }
 }
