@@ -1,0 +1,18 @@
+query GetLessonPreview($input: TimeRangeRequest!) {
+  lessons(input: $input) {
+    id,
+    subject {
+      name,
+      standard
+    },
+    summary,
+    tutor {
+      id,
+      firstName,
+      lastName,
+      profilePic
+    },
+    startTime,
+    endTime
+  }
+}

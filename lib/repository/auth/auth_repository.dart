@@ -1,6 +1,7 @@
 import 'dart:async';
-import 'package:meta/meta.dart';
+
 import 'package:ferry/ferry.dart';
+import 'package:meta/meta.dart';
 
 import '../exceptions.dart';
 import '../ferry_client.dart';

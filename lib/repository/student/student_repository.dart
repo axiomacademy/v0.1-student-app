@@ -1,10 +1,11 @@
 import 'dart:async';
+
 import 'package:ferry/ferry.dart';
 
-import '../ferry_client.dart';
-import '../auth/auth_repository.dart';
 import '../../models/student.dart';
+import '../auth/auth_repository.dart';
 import '../exceptions.dart';
+import '../ferry_client.dart';
 import 'gql/student_requests.req.gql.dart';
 
 /// Repository containing all the GQL queries/mutations for the Student
@@ -39,7 +40,7 @@ class StudentRepository {
       final jwt = res.data?.createStudent;
 
       if (jwt == null) {
-        throw EmptyResponseException();
+        throw EmptyResponseException;
       }
 
       _authRepository.logInManual(jwt);
@@ -55,12 +56,12 @@ class StudentRepository {
     // Retreive auth client and create request (check if the auth client exists)
     final authClient = _fclient.getAuthClient();
     if (authClient == null) {
-      throw ("Error retrieving self: Not authorised");
+      throw UnauthenticatedException;
     }
 
     await for (final res in authClient.request(selfReq)) {
       if (res.hasErrors) {
-        throw (res.graphqlErrors.single.message);
+        throw GQLServerException(res.graphqlErrors.single.message);
       }
 
       // Default to returning an empty map so that key lookups don't fail
@@ -75,6 +76,6 @@ class StudentRepository {
           rawStudent["profilePic"]);
     }
 
-    throw GraphQLStreamException();
+    throw GraphQLStreamException;
   }
 }

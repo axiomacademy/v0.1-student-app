@@ -12,3 +12,6 @@ class GraphQLStreamException implements Exception {}
 
 /// Empty/null graphql response
 class EmptyResponseException implements Exception {}
+
+/// AuthenticationException
+class UnauthenticatedException implements Exception {}
