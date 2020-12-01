@@ -25,8 +25,8 @@ class _HomeViewState extends State<HomeView> {
     return SafeArea(
         child: RepositoryProvider(
             create: (context) => LessonRepository(
-                context.read<FerryClient>(),
-                DateTime.now().subtract(Duration(days: 30)),
+                RepositoryProvider.of<FerryClient>(context),
+                DateTime.now().subtract(Duration(days: 40)),
                 DateTime.now().add(Duration(days: 7))),
             child: Container(
                 padding: EdgeInsets.only(top: 8.0),

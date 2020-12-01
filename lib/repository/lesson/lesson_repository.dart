@@ -36,12 +36,15 @@ class LessonRepository {
 
     _lessonSubscription = authClient.request(_lessonReq).listen((res) {
       if (res.hasErrors) {
+        print(res.graphqlErrors.single.message);
         throw GQLServerException(res.graphqlErrors.single.message);
       }
 
       // Default to returning an empty map so that key lookups don't fail
-      final List<LessonPreview> lessonPreviews =
-          res.data?.lessons?.map((lessonPreviewRaw) {
+      // Retrieve list
+      final rawLessons = res.data?.lessons;
+
+      final lessonPreviews = rawLessons.map((lessonPreviewRaw) {
         final subject = Subject(lessonPreviewRaw.subject.name.name,
             lessonPreviewRaw.subject.standard.name);
         return LessonPreview(
@@ -54,7 +57,9 @@ class LessonRepository {
             lessonPreviewRaw.tutor.profilePic,
             lessonPreviewRaw.startTime,
             lessonPreviewRaw.endTime);
-      });
+      }).toList();
+
+      print("CHECK: $lessonPreviews");
 
       _lessonStreamController.add(lessonPreviews);
     });

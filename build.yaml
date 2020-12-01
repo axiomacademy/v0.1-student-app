@@ -32,6 +32,9 @@ targets:
         enabled: true
         options:
           schema: axiom|lib/repository/schema/schema.graphql
+          custom_serializers:
+            - import: 'package:axiom/repository/time_serializer.dart'
+              name: TimeSerializer
 
       ferry_generator|req_builder:
         enabled: true

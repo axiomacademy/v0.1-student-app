@@ -21,7 +21,9 @@ void main() {
   final studentRepository = StudentRepository(fclient, authRepository);
 
   runApp(AxiomApp(
-      authRepository: authRepository, studentRepository: studentRepository));
+      authRepository: authRepository,
+      studentRepository: studentRepository,
+      fclient: fclient));
 }
 
 /// The main flutter application
@@ -32,11 +34,15 @@ class AxiomApp extends StatelessWidget {
   /// Root Student Repository
   final StudentRepository studentRepository;
 
+  /// Root ferry client
+  final FerryClient fclient;
+
   /// Root App constructor
   AxiomApp(
       {Key key,
       @required this.authRepository,
-      @required this.studentRepository})
+      @required this.studentRepository,
+      @required this.fclient})
       : super(key: key);
 
   // This widget is the root of your application.
@@ -45,7 +51,8 @@ class AxiomApp extends StatelessWidget {
     return MultiRepositoryProvider(
       providers: [
         RepositoryProvider.value(value: authRepository),
-        RepositoryProvider.value(value: studentRepository)
+        RepositoryProvider.value(value: studentRepository),
+        RepositoryProvider.value(value: fclient)
       ],
       child: BlocProvider(
           create: (_) => AuthBloc(
