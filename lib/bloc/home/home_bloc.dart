@@ -25,7 +25,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       : _lessonRepository = lessonRepository,
         super(const HomeState.initial()) {
     _lessonSubscription = _lessonRepository.lessons
-        .listen((lessons) => HomeLoadingComplete(lessons));
+        .listen((lessons) => add(HomeLoadingComplete(lessons)));
   }
 
   Stream<HomeState> mapEventToState(HomeEvent event) async* {

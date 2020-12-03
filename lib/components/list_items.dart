@@ -52,7 +52,8 @@ class SubjectListItem extends StatelessWidget {
                                                 mainAxisSize: MainAxisSize.min,
                                                 children: <Widget>[
                                                   Expanded(
-                                                      child: Text(subject,
+                                                      child: Text(
+                                                          '${subject[0].toUpperCase()}${subject.substring(1).toLowerCase()}',
                                                           style:
                                                               Theme.of(context)
                                                                   .textTheme
