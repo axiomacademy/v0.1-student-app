@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import '../../repository/ferry_client.dart';
+import '../../repository/lesson/lesson_repository.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../bloc/home/home_bloc.dart';
 
 import "../booking_bottom_sheet/main.dart";
 import 'home_view.dart';
@@ -25,65 +29,74 @@ class _MainPageState extends State<MainPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Material(
-        child: Scaffold(
-      body: PageView(
-          controller: _controller,
-          children: <Widget>[HomeView(), ScheduleView()]),
-      floatingActionButton: FloatingActionButton.extended(
-          splashColor: Color(0xFF8E58DF),
-          onPressed: () {
-            showModalBottomSheet<void>(
-                backgroundColor: Colors.transparent,
-                isScrollControlled: true,
-                context: context,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(15.0),
-                ),
-                builder: (context) {
-                  return BookingBottomSheet();
-                });
-          },
-          label: Text('Book'.toUpperCase()),
-          icon: Icon(Icons.add),
-          backgroundColor: Theme.of(context).primaryColor),
-      bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
-        backgroundColor: Theme.of(context).primaryColor,
-        unselectedItemColor: Color(0x99FFFFFF),
-        selectedItemColor: Color(0xFFFFFFFF),
-        selectedFontSize: 12,
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: "Home",
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.access_time),
-            label: "Scheduled",
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.note),
-            label: "Notes",
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.notifications),
-            label: "Notifications",
-          ),
-        ],
-        currentIndex: _currentIndex,
-        onTap: (index) {
-          setState(() {
-            _currentIndex = index;
-          });
+    return RepositoryProvider(
+        create: (context) => LessonRepository(
+            RepositoryProvider.of<FerryClient>(context),
+            DateTime.now().subtract(Duration(days: 40)),
+            DateTime.now().add(Duration(days: 7))),
+        child: Material(
+            child: BlocProvider(
+                create: (context) => HomeBloc(
+                    lessonRepository:
+                        RepositoryProvider.of<LessonRepository>(context)),
+                child: Scaffold(
+                  body: PageView(
+                      controller: _controller,
+                      children: <Widget>[HomeView(), ScheduleView()]),
+                  floatingActionButton: FloatingActionButton.extended(
+                      splashColor: Color(0xFF8E58DF),
+                      onPressed: () {
+                        showModalBottomSheet<void>(
+                            backgroundColor: Colors.transparent,
+                            isScrollControlled: true,
+                            context: context,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(15.0),
+                            ),
+                            builder: (context) {
+                              return BookingBottomSheet();
+                            });
+                      },
+                      label: Text('Book'.toUpperCase()),
+                      icon: Icon(Icons.add),
+                      backgroundColor: Theme.of(context).primaryColor),
+                  bottomNavigationBar: BottomNavigationBar(
+                    type: BottomNavigationBarType.fixed,
+                    backgroundColor: Theme.of(context).primaryColor,
+                    unselectedItemColor: Color(0x99FFFFFF),
+                    selectedItemColor: Color(0xFFFFFFFF),
+                    selectedFontSize: 12,
+                    items: const <BottomNavigationBarItem>[
+                      BottomNavigationBarItem(
+                        icon: Icon(Icons.home),
+                        label: "Home",
+                      ),
+                      BottomNavigationBarItem(
+                        icon: Icon(Icons.access_time),
+                        label: "Scheduled",
+                      ),
+                      BottomNavigationBarItem(
+                        icon: Icon(Icons.note),
+                        label: "Notes",
+                      ),
+                      BottomNavigationBarItem(
+                        icon: Icon(Icons.notifications),
+                        label: "Notifications",
+                      ),
+                    ],
+                    currentIndex: _currentIndex,
+                    onTap: (index) {
+                      setState(() {
+                        _currentIndex = index;
+                      });
 
-          if (_controller.hasClients) {
-            _controller.animateToPage(index,
-                duration: const Duration(milliseconds: 400),
-                curve: Curves.easeInOut);
-          }
-        },
-      ),
-    ));
+                      if (_controller.hasClients) {
+                        _controller.animateToPage(index,
+                            duration: const Duration(milliseconds: 400),
+                            curve: Curves.easeInOut);
+                      }
+                    },
+                  ),
+                ))));
   }
 }

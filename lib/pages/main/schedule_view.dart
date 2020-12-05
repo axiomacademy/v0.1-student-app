@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:table_calendar/table_calendar.dart';
 
+import '../../bloc/home/home_bloc.dart';
 import '../../components/appbar.dart';
-import '../../components/avatar.dart';
+import '../../components/list_items.dart';
+import '../../models/lesson_preview.dart';
+import '../../repository/ferry_client.dart';
+import '../../repository/lesson/lesson_repository.dart';
 
 class ScheduleView extends StatefulWidget {
   ScheduleView({Key key}) : super(key: key);
@@ -13,139 +18,15 @@ class ScheduleView extends StatefulWidget {
 
 class _ScheduleViewState extends State<ScheduleView>
     with TickerProviderStateMixin {
-  Map<DateTime, List<Map<String, dynamic>>> _events;
-  List _selectedEvents;
+  DateTime _selectedDay;
   AnimationController _animationController;
   CalendarController _calendarController;
 
   @override
   void initState() {
     super.initState();
-    final _selectedDay = DateTime.now();
+    _selectedDay = roundToDay(DateTime.now());
 
-    _events = {
-      _selectedDay.subtract(Duration(days: 30)): [
-        {
-          "image":
-              "https://s3-ap-southeast-1.amazonaws.com/engpeepingmoon/140919054722tiger-shroff.jpg",
-          "duration": "2 - 4pm",
-          "topic": "Physics",
-          "tutorname": "Arvinderjit Singh"
-        }
-      ],
-      _selectedDay.subtract(Duration(days: 27)): [
-        {
-          "image":
-              "https://s3-ap-southeast-1.amazonaws.com/engpeepingmoon/140919054722tiger-shroff.jpg",
-          "duration": "1 - 2pm",
-          "topic": "Physics",
-          "tutorname": "Arvinderjit Singh"
-        }
-      ],
-      _selectedDay.subtract(Duration(days: 20)): [
-        {
-          "image": "https://s3.envato.com/files/236560326/preview.jpg",
-          "duration": "2 - 4pm",
-          "topic": "Economics",
-          "tutorname": "Jasmine Sylvia"
-        },
-      ],
-      _selectedDay.subtract(Duration(days: 16)): [
-        {
-          "image":
-              "https://s3-ap-southeast-1.amazonaws.com/engpeepingmoon/140919054722tiger-shroff.jpg",
-          "duration": "2 - 4pm",
-          "topic": "Physics",
-          "tutorname": "Arvinderjit Singh"
-        },
-        {
-          "image": "https://s3.envato.com/files/236560326/preview.jpg",
-          "duration": "11am - 1pm",
-          "topic": "Economics",
-          "tutorname": "Jasmine Sylvia"
-        },
-      ],
-      _selectedDay.subtract(Duration(days: 4)): [
-        {
-          "image":
-              "https://s3-ap-southeast-1.amazonaws.com/engpeepingmoon/140919054722tiger-shroff.jpg",
-          "duration": "2 - 4pm",
-          "topic": "Physics",
-          "tutorname": "Arvinderjit Singh"
-        },
-        {
-          "image": "https://s3.envato.com/files/236560326/preview.jpg",
-          "duration": "11am - 1pm",
-          "topic": "Economics",
-          "tutorname": "Jasmine Sylvia"
-        },
-      ],
-      _selectedDay.subtract(Duration(days: 2)): [
-        {
-          "image": "https://s3.envato.com/files/236560326/preview.jpg",
-          "duration": "11am - 1pm",
-          "topic": "Economics",
-          "tutorname": "Jasmine Sylvia"
-        },
-      ],
-      _selectedDay: [
-        {
-          "image":
-              "https://s3-ap-southeast-1.amazonaws.com/engpeepingmoon/140919054722tiger-shroff.jpg",
-          "duration": "2 - 4pm",
-          "topic": "Physics",
-          "tutorname": "Arvinderjit Singh"
-        },
-        {
-          "image": "https://s3.envato.com/files/236560326/preview.jpg",
-          "duration": "11am - 1pm",
-          "topic": "Economics",
-          "tutorname": "Jasmine Sylvia"
-        },
-      ],
-      _selectedDay.add(Duration(days: 1)): [
-        {
-          "image":
-              "https://s3-ap-southeast-1.amazonaws.com/engpeepingmoon/140919054722tiger-shroff.jpg",
-          "duration": "2 - 4pm",
-          "topic": "Physics",
-          "tutorname": "Arvinderjit Singh"
-        },
-      ],
-      _selectedDay.add(Duration(days: 7)): [
-        {
-          "image": "https://s3.envato.com/files/236560326/preview.jpg",
-          "duration": "11am - 1pm",
-          "topic": "Economics",
-          "tutorname": "Jasmine Sylvia"
-        },
-      ],
-      _selectedDay.add(Duration(days: 11)): [
-        {
-          "image":
-              "https://s3-ap-southeast-1.amazonaws.com/engpeepingmoon/140919054722tiger-shroff.jpg",
-          "duration": "2 - 4pm",
-          "topic": "Physics",
-          "tutorname": "Arvinderjit Singh"
-        },
-        {
-          "image": "https://s3.envato.com/files/236560326/preview.jpg",
-          "duration": "11am - 1pm",
-          "topic": "Economics",
-          "tutorname": "Jasmine Sylvia"
-        },
-      ],
-      _selectedDay.add(Duration(days: 17)): [
-        {
-          "image": "https://s3.envato.com/files/236560326/preview.jpg",
-          "duration": "11am - 1pm",
-          "topic": "Economics",
-          "tutorname": "Jasmine Sylvia"
-        },
-      ],
-    };
-
-    _selectedEvents = _events[_selectedDay] ?? [];
     _calendarController = CalendarController();
 
     _animationController = AnimationController(
@@ -167,22 +48,34 @@ class _ScheduleViewState extends State<ScheduleView>
   Widget build(BuildContext context) {
     return SafeArea(
         child: Container(
-            padding: EdgeInsets.only(left: 10.0, right: 10.0, top: 8.0),
-            child: ListView(shrinkWrap: true, children: <Widget>[
-              Padding(
-                  padding: EdgeInsets.only(left: 10.0), child: AxiomAppBar()),
-              _buildTableCalendar(),
-              Divider(),
-              ..._buildEventList()
-            ])));
+            padding: EdgeInsets.only(left: 0.0, right: 0.0, top: 8.0),
+            child: BlocBuilder<HomeBloc, HomeState>(builder: (context, state) {
+              if (state.status == HomeStatus.loaded) {
+                final lessons = state.lessons ?? [];
+                final formattedLessons = _formatLessons(lessons);
+
+                final selectedLessons = formattedLessons[_selectedDay] ?? [];
+
+                return ListView(shrinkWrap: true, children: <Widget>[
+                  Padding(
+                      padding: EdgeInsets.only(left: 10.0),
+                      child: AxiomAppBar()),
+                  _buildTableCalendar(formattedLessons),
+                  Divider(),
+                  ..._buildEventList(selectedLessons)
+                ]);
+              } else {
+                return Container();
+              }
+            })));
   }
 
-  ///************************************** CALLBACKS *****************************
+  ///***************************** CALLBACKS *****************************
 
   void _onDaySelected(DateTime day, List events) {
     print('CALLBACK: _onDaySelected');
     setState(() {
-      _selectedEvents = events;
+      _selectedDay = roundToDay(day);
     });
   }
 
@@ -196,11 +89,45 @@ class _ScheduleViewState extends State<ScheduleView>
     print('CALLBACK: _onCalendarCreated');
   }
 
-  ///***************************** BUILDER UTILITIES *****************************
-  Widget _buildTableCalendar() {
+  ///*************************** BUILDER UTILITIES *****************************
+  Map<DateTime, List<LessonPreview>> _formatLessons(
+      List<LessonPreview> lessons) {
+    // Sort it to make it easier to cluster
+    lessons.sort((l1, l2) => l1.startTime.compareTo(l2.startTime));
+
+    var current = roundToDay(lessons[0].startTime);
+    var formattedLessons = {
+      current: [
+        lessons[0],
+      ]
+    };
+
+    for (var i = 1; i < lessons.length; i++) {
+      if (sameDay(current, lessons[i].startTime)) {
+        formattedLessons[current].add(lessons[i]);
+      } else {
+        current = roundToDay(lessons[i].startTime);
+        formattedLessons[current] = [lessons[i]];
+      }
+    }
+
+    return formattedLessons;
+  }
+
+  bool sameDay(DateTime a, DateTime b) {
+    return (a.year == b.year) && (a.month == b.month) && (a.day == b.day);
+  }
+
+  DateTime roundToDay(DateTime a) {
+    final day = Duration(days: 1);
+    return DateTime.fromMillisecondsSinceEpoch(a.millisecondsSinceEpoch -
+        a.millisecondsSinceEpoch % day.inMilliseconds);
+  }
+
+  Widget _buildTableCalendar(Map<DateTime, List<LessonPreview>> lessons) {
     return TableCalendar(
       calendarController: _calendarController,
-      events: _events,
+      events: lessons,
       initialCalendarFormat: CalendarFormat.month,
       formatAnimation: FormatAnimation.slide,
       startingDayOfWeek: StartingDayOfWeek.sunday,
@@ -285,86 +212,15 @@ class _ScheduleViewState extends State<ScheduleView>
     );
   }
 
-  List<Widget> _buildEventList() {
-    return _selectedEvents
-        .map((event) => LessonListItem(
-            tutorImage: event["image"],
-            time: event["duration"],
-            subject: event["topic"],
-            tutorName: event["tutorname"]))
+  List<Widget> _buildEventList(List<LessonPreview> lessons) {
+    return lessons
+        .map((lesson) => TutorListItem(
+            startTime: lesson.startTime,
+            endTime: lesson.endTime,
+            subject: lesson.subject.name,
+            tutorImage: lesson.tutorProfilePic,
+            tutorFirstName: lesson.tutorFirstName,
+            tutorLastName: lesson.tutorLastName))
         .toList();
-  }
-}
-
-class LessonListItem extends StatelessWidget {
-  final String tutorImage;
-  final String time;
-  final String subject;
-  final String tutorName;
-
-  LessonListItem(
-      {@required this.time,
-      @required this.tutorImage,
-      @required this.subject,
-      @required this.tutorName,
-      Key key})
-      : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Material(
-        child: Ink(
-            child: InkWell(
-                customBorder: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                splashColor: Color(0xFFF0E8FA),
-                onTap: () {},
-                child: Padding(
-                  padding: EdgeInsets.only(left: 10.0, right: 10.0),
-                  child: Row(children: <Widget>[
-                    UserAvatar(tutorImage, active: false),
-                    Expanded(
-                        child: Container(
-                            margin: EdgeInsets.only(left: 14.0),
-                            padding: EdgeInsets.only(top: 10.0, bottom: 15.0),
-                            decoration: BoxDecoration(
-                                border: Border(
-                                    bottom: BorderSide(
-                                        color: Color(0xFFE0E0E0), width: 1.0))),
-                            child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: <Widget>[
-                                  Padding(
-                                      padding: EdgeInsets.only(
-                                          top: 5.0, bottom: 5.0),
-                                      child: Row(
-                                          mainAxisSize: MainAxisSize.min,
-                                          children: <Widget>[
-                                            Text(time.toUpperCase(),
-                                                style: Theme.of(context)
-                                                    .textTheme
-                                                    .overline
-                                                    .copyWith(
-                                                        color:
-                                                            Color(0xFF666666),
-                                                        fontWeight:
-                                                            FontWeight.w500))
-                                          ])),
-                                  Text(subject,
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .subtitle1),
-                                  Padding(
-                                      padding: EdgeInsets.only(top: 5.0),
-                                      child: Text(tutorName,
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .bodyText2
-                                              .copyWith(
-                                                  color: Color(0xFF666666)))),
-                                ]))),
-                  ]),
-                ))));
   }
 }
