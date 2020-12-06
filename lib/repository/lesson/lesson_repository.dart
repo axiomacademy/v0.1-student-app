@@ -78,6 +78,8 @@ class LessonRepository {
       throw UnauthenticatedException;
     }
 
+    print("RUN REFRESH LESSONS");
+
     authClient.requestController.add(_lessonReq);
   }
 
@@ -87,6 +89,8 @@ class LessonRepository {
     if (authClient == null) {
       throw UnauthenticatedException;
     }
+
+    print("RUN FETCH LESSONS");
 
     // Rebuild request
     _lessonReq = _lessonReq.rebuild(

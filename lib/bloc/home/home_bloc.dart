@@ -30,10 +30,12 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
   Stream<HomeState> mapEventToState(HomeEvent event) async* {
     if (event is HomeLoadingComplete) {
+      print("HOME LOADING COMPLETE");
       lessonsCache = event.lessons;
       yield HomeState.loaded(event.lessons);
     } else if (event is HomeRefreshRequested) {
       _lessonRepository.refreshLessons();
+      yield HomeState.loading(lessonsCache);
     } else if (event is HomeLessonsRequested) {
       _lessonRepository.fetchAndMergeLessons(event.startTime, event.endTime);
       yield HomeState.loading(lessonsCache);

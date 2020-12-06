@@ -6,10 +6,10 @@ import '../../bloc/home/home_bloc.dart';
 import '../../components/appbar.dart';
 import '../../components/list_items.dart';
 import '../../models/lesson_preview.dart';
-import '../../repository/ferry_client.dart';
-import '../../repository/lesson/lesson_repository.dart';
 
+/// The view with the calendar
 class ScheduleView extends StatefulWidget {
+  /// Default constructor
   ScheduleView({Key key}) : super(key: key);
 
   @override
@@ -19,6 +19,9 @@ class ScheduleView extends StatefulWidget {
 class _ScheduleViewState extends State<ScheduleView>
     with TickerProviderStateMixin {
   DateTime _selectedDay;
+  Map<DateTime, List<LessonPreview>> _lessons = {};
+  List<LessonPreview> _selectedLessons = [];
+
   AnimationController _animationController;
   CalendarController _calendarController;
 
@@ -46,84 +49,53 @@ class _ScheduleViewState extends State<ScheduleView>
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-        child: Container(
-            padding: EdgeInsets.only(left: 0.0, right: 0.0, top: 8.0),
-            child: BlocBuilder<HomeBloc, HomeState>(builder: (context, state) {
-              if (state.status == HomeStatus.loaded) {
-                final lessons = state.lessons ?? [];
-                final formattedLessons = _formatLessons(lessons);
-
-                final selectedLessons = formattedLessons[_selectedDay] ?? [];
-
-                return ListView(shrinkWrap: true, children: <Widget>[
+    return BlocListener<HomeBloc, HomeState>(
+        listener: (context, state) {
+          print("LISTENER RUNNING");
+          if (state.status == HomeStatus.loaded) {
+            final lessons = state.lessons ?? [];
+            setState(() {
+              _lessons = _formatLessons(lessons);
+              _selectedLessons = _lessons[_selectedDay] ?? [];
+            });
+          }
+        },
+        child: SafeArea(
+            child: Container(
+                padding: EdgeInsets.only(left: 0.0, right: 0.0, top: 8.0),
+                child: ListView(shrinkWrap: true, children: <Widget>[
                   Padding(
                       padding: EdgeInsets.only(left: 10.0),
                       child: AxiomAppBar()),
-                  _buildTableCalendar(formattedLessons),
+                  _buildTableCalendar(_lessons),
                   Divider(),
-                  ..._buildEventList(selectedLessons)
-                ]);
-              } else {
-                return Container();
-              }
-            })));
+                  ..._buildEventList(_selectedLessons)
+                ]))));
   }
 
   ///***************************** CALLBACKS *****************************
 
-  void _onDaySelected(DateTime day, List events) {
+  void _onDaySelected(BuildContext context, DateTime day, List events) {
     print('CALLBACK: _onDaySelected');
     setState(() {
       _selectedDay = roundToDay(day);
+      _selectedLessons = _lessons[_selectedDay] ?? [];
     });
   }
 
-  void _onVisibleDaysChanged(
-      DateTime first, DateTime last, CalendarFormat format) {
+  void _onVisibleDaysChanged(BuildContext context, DateTime first,
+      DateTime last, CalendarFormat format) {
+    context.read<HomeBloc>().add(HomeLessonsRequested(first, last));
     print('CALLBACK: _onVisibleDaysChanged');
   }
 
-  void _onCalendarCreated(
-      DateTime first, DateTime last, CalendarFormat format) {
+  void _onCalendarCreated(BuildContext context, DateTime first, DateTime last,
+      CalendarFormat format) {
+    context.read<HomeBloc>().add(HomeRefreshRequested());
     print('CALLBACK: _onCalendarCreated');
   }
 
   ///*************************** BUILDER UTILITIES *****************************
-  Map<DateTime, List<LessonPreview>> _formatLessons(
-      List<LessonPreview> lessons) {
-    // Sort it to make it easier to cluster
-    lessons.sort((l1, l2) => l1.startTime.compareTo(l2.startTime));
-
-    var current = roundToDay(lessons[0].startTime);
-    var formattedLessons = {
-      current: [
-        lessons[0],
-      ]
-    };
-
-    for (var i = 1; i < lessons.length; i++) {
-      if (sameDay(current, lessons[i].startTime)) {
-        formattedLessons[current].add(lessons[i]);
-      } else {
-        current = roundToDay(lessons[i].startTime);
-        formattedLessons[current] = [lessons[i]];
-      }
-    }
-
-    return formattedLessons;
-  }
-
-  bool sameDay(DateTime a, DateTime b) {
-    return (a.year == b.year) && (a.month == b.month) && (a.day == b.day);
-  }
-
-  DateTime roundToDay(DateTime a) {
-    final day = Duration(days: 1);
-    return DateTime.fromMillisecondsSinceEpoch(a.millisecondsSinceEpoch -
-        a.millisecondsSinceEpoch % day.inMilliseconds);
-  }
-
   Widget _buildTableCalendar(Map<DateTime, List<LessonPreview>> lessons) {
     return TableCalendar(
       calendarController: _calendarController,
@@ -204,11 +176,13 @@ class _ScheduleViewState extends State<ScheduleView>
         },
       ),
       onDaySelected: (date, events, _) {
-        _onDaySelected(date, events);
+        _onDaySelected(context, date, events);
         _animationController.forward(from: 0.0);
       },
-      onVisibleDaysChanged: _onVisibleDaysChanged,
-      onCalendarCreated: _onCalendarCreated,
+      onVisibleDaysChanged: (first, last, format) =>
+          _onVisibleDaysChanged(context, first, last, format),
+      onCalendarCreated: (first, last, format) =>
+          _onCalendarCreated(context, first, last, format),
     );
   }
 
@@ -222,5 +196,40 @@ class _ScheduleViewState extends State<ScheduleView>
             tutorFirstName: lesson.tutorFirstName,
             tutorLastName: lesson.tutorLastName))
         .toList();
+  }
+
+  //********************** DATETIME UTILITIES *****************//
+  Map<DateTime, List<LessonPreview>> _formatLessons(
+      List<LessonPreview> lessons) {
+    // Sort it to make it easier to cluster
+    lessons.sort((l1, l2) => l1.startTime.compareTo(l2.startTime));
+
+    var current = roundToDay(lessons[0].startTime);
+    var formattedLessons = {
+      current: [
+        lessons[0],
+      ]
+    };
+
+    for (var i = 1; i < lessons.length; i++) {
+      if (sameDay(current, lessons[i].startTime)) {
+        formattedLessons[current].add(lessons[i]);
+      } else {
+        current = roundToDay(lessons[i].startTime);
+        formattedLessons[current] = [lessons[i]];
+      }
+    }
+
+    return formattedLessons;
+  }
+
+  bool sameDay(DateTime a, DateTime b) {
+    return (a.year == b.year) && (a.month == b.month) && (a.day == b.day);
+  }
+
+  DateTime roundToDay(DateTime a) {
+    final day = Duration(days: 1);
+    return DateTime.fromMillisecondsSinceEpoch(a.millisecondsSinceEpoch -
+        a.millisecondsSinceEpoch % day.inMilliseconds);
   }
 }

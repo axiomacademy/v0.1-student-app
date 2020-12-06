@@ -74,6 +74,9 @@ flutter:
     - ./assets/images/google-icon.svg
     - ./assets/images/background-login.svg
     - ./assets/images/background-register.svg
+    - ./assets/images/no-recents.svg
+    - ./assets/images/no-upcoming.svg
+    - ./assets/images/rocket.svg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
