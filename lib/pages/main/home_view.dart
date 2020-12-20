@@ -29,6 +29,9 @@ class _HomeViewState extends State<HomeView> {
             .where((lesson) => lesson.startTime.isBefore(DateTime.now()))
             .toList();
 
+        recentLessons.sort(
+            (first, second) => -first.startTime.compareTo(second.startTime));
+
         return SafeArea(
             child: Container(
                 padding: EdgeInsets.only(top: 8.0),
@@ -99,7 +102,7 @@ class _RecentLessonsList extends StatelessWidget {
   Widget build(BuildContext context) {
     return (lessons.isEmpty)
         ? _LessonsEmpty("./assets/images/no-recents.svg", "No Recent Sessions",
-            "Let's complete some sessions and start learning!")
+            "Let's complete some sessions and start learning!", imageWidth: 100)
         : Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -123,8 +126,10 @@ class _LessonsEmpty extends StatelessWidget {
   final String picturePath;
   final String title;
   final String description;
+  final double imageWidth;
 
-  _LessonsEmpty(this.picturePath, this.title, this.description);
+  _LessonsEmpty(this.picturePath, this.title, this.description,
+      {this.imageWidth = 75});
 
   @override
   Widget build(BuildContext context) {
@@ -132,14 +137,13 @@ class _LessonsEmpty extends StatelessWidget {
         child: Container(
             width: 200,
             height: 250,
-            padding: EdgeInsets.only(top: 0.0),
             child: Column(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   SvgPicture.asset(picturePath,
-                      semanticsLabel: "Filler image", width: 75),
+                      semanticsLabel: "Filler image", width: imageWidth),
                   Padding(
                       padding: EdgeInsets.only(top: 20.0, bottom: 5.0),
                       child: Text(title,

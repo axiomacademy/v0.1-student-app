@@ -10,31 +10,37 @@ import '../ferry_client.dart';
 
 /// Contains all the GraphQL calls relating to authentication
 class LessonRepository {
-  GGetLessonPreviewReq _lessonReq;
   final _lessonStreamController = StreamController<List<LessonPreview>>();
   final FerryClient _fclient;
 
-  StreamSubscription _lessonSubscription;
+  /// Stores the lesson cache
+  OrderedList<String, LessonPreview> cacheLessons = OrderedList();
 
-  /// The time period for which lessons have been loaded
-  DateTime loadedTimeStart, loadedTimeEnd;
+  /// First time to pull, usually centered around today
+  DateTime defaultStartTime, defaultEndTime;
 
   /// Default Constructor, takes in a ferry client instance
-  LessonRepository(FerryClient client, this.loadedTimeStart, this.loadedTimeEnd)
+  LessonRepository(
+      FerryClient client, this.defaultStartTime, this.defaultEndTime)
       : _fclient = client {
+    fetchLessons(defaultStartTime, defaultEndTime);
+  }
+
+  /// Will fetch the lessons and merge into the cache
+  void fetchLessons(DateTime startTime, DateTime endTime) async {
+    print("FETCH: $startTime - $endTime");
     // Build the upcoming lessons request
-    _lessonReq = GGetLessonPreviewReq((b) => b
-      ..requestId = 'LessonReq'
+    final lessonReq = GGetLessonPreviewReq((b) => b
       ..fetchPolicy = FetchPolicy.NoCache
-      ..vars.input.startTime = loadedTimeStart
-      ..vars.input.endTime = loadedTimeEnd);
+      ..vars.input.startTime = startTime
+      ..vars.input.endTime = endTime);
 
     final authClient = _fclient.getAuthClient();
     if (authClient == null) {
       throw UnauthenticatedException;
     }
 
-    _lessonSubscription = authClient.request(_lessonReq).listen((res) {
+    await for (final res in authClient.request(lessonReq)) {
       if (res.hasErrors) {
         print(res.graphqlErrors.single.message);
         throw GQLServerException(res.graphqlErrors.single.message);
@@ -44,70 +50,70 @@ class LessonRepository {
       // Retrieve list
       final rawLessons = res.data?.lessons;
 
-      final lessonPreviews = rawLessons.map((lessonPreviewRaw) {
-        final subject = Subject(lessonPreviewRaw.subject.name.name,
-            lessonPreviewRaw.subject.standard.name);
-        return LessonPreview(
-            lessonPreviewRaw.id,
+      print("FETCHED ${rawLessons.length} lessons");
+
+      for (var rawLesson in rawLessons) {
+        final subject = Subject(
+            rawLesson.subject.name.name, rawLesson.subject.standard.name);
+        final lesson = LessonPreview(
+            rawLesson.id,
             subject,
-            lessonPreviewRaw.summary,
-            lessonPreviewRaw.tutor.id,
-            lessonPreviewRaw.tutor.firstName,
-            lessonPreviewRaw.tutor.lastName,
-            lessonPreviewRaw.tutor.profilePic,
-            lessonPreviewRaw.startTime,
-            lessonPreviewRaw.endTime);
-      }).toList();
+            rawLesson.summary,
+            rawLesson.tutor.id,
+            rawLesson.tutor.firstName,
+            rawLesson.tutor.lastName,
+            rawLesson.tutor.profilePic,
+            rawLesson.startTime,
+            rawLesson.endTime);
 
-      print("CHECK: $lessonPreviews");
+        mergeLessonIntoCache(lesson);
+      }
 
-      _lessonStreamController.add(lessonPreviews);
-    });
+      _lessonStreamController.add(cacheLessons.getAll());
+      return;
+    }
   }
+
+  /// Update the pulled cache
+  void mergeLessonIntoCache(LessonPreview lesson) =>
+      cacheLessons.setByKey(lesson.id, lesson);
+
+  /// Get the default lessons
+  void refreshDefaultLessons() =>
+      fetchLessons(defaultStartTime, defaultEndTime);
 
   /// Initialized to an empty list before any request is made
   Stream<List<LessonPreview>> get lessons async* {
-    Future.delayed(Duration(seconds: 1), refreshLessons);
+    Future.delayed(Duration(seconds: 1),
+        () => _lessonStreamController.add(cacheLessons.getAll()));
     yield* _lessonStreamController.stream;
-  }
-
-  /// Refresh stream
-  void refreshLessons() {
-    final authClient = _fclient.getAuthClient();
-    if (authClient == null) {
-      throw UnauthenticatedException;
-    }
-
-    print("RUN REFRESH LESSONS");
-
-    authClient.requestController.add(_lessonReq);
-  }
-
-  /// Paginate by fetching new lessons
-  void fetchAndMergeLessons(DateTime startTime, DateTime endTime) {
-    final authClient = _fclient.getAuthClient();
-    if (authClient == null) {
-      throw UnauthenticatedException;
-    }
-
-    print("RUN FETCH LESSONS");
-
-    // Rebuild request
-    _lessonReq = _lessonReq.rebuild(
-      (b) => b
-        ..vars.input.startTime = startTime
-        ..vars.input.endTime = endTime
-        ..updateResult = (previous, result) =>
-            previous?.rebuild((b) => b..lessons.addAll(result.lessons)) ??
-            result,
-    );
-
-    authClient.requestController.add(_lessonReq);
   }
 
   /// Automatically disposes StreamController
   void dispose() {
     _lessonStreamController.close();
-    _lessonSubscription.cancel();
   }
+}
+
+/// Simple ordered list wrapper
+class OrderedList<K, V> {
+  /// Contains the actual value elements
+  List<V> list = [];
+
+  /// Contains mapping from key to list index
+  Map<K, int> order = {};
+
+  /// Sets the elements by key
+  void setByKey(K key, V value) {
+    if (order.containsKey(key)) {
+      final index = order[key];
+      list[index] = value;
+    } else {
+      list.add(value);
+      order[key] = list.length - 1;
+    }
+  }
+
+  /// Returned a cloned list
+  List<V> getAll() => List.from(list);
 }

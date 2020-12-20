@@ -34,10 +34,10 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       lessonsCache = event.lessons;
       yield HomeState.loaded(event.lessons);
     } else if (event is HomeRefreshRequested) {
-      _lessonRepository.refreshLessons();
+      _lessonRepository.refreshDefaultLessons();
       yield HomeState.loading(lessonsCache);
     } else if (event is HomeLessonsRequested) {
-      _lessonRepository.fetchAndMergeLessons(event.startTime, event.endTime);
+      _lessonRepository.fetchLessons(event.startTime, event.endTime);
       yield HomeState.loading(lessonsCache);
     }
   }
